@@ -1,70 +1,40 @@
 # Anne English Lab
 
-Aplicação web para prática de inglês em **arquivo único (`index.html`)**, com foco em:
+Projeto web educacional com navegação entre páginas para prática de inglês.
 
-- vocabulário aleatório;
-- treino de pronúncia com **TTS** (texto para fala);
-- reconhecimento de voz com **SpeechRecognition**;
-- pontuação por XP e nível;
-- ranking em tempo real com Firebase (ou fallback local).
+## Estrutura obrigatória implementada
 
-## Funcionalidades
+- `index.html` → Login (nome, senha, botão Entrar)
+- `dashboard.html` → Resumo do aluno (nome, nível, XP, streak, atividades)
+- `listening.html` → Listening com reprodução, gravação e avaliação automática
+- `quizzes.html` → Quiz de múltipla escolha com correção automática e XP
+- `flashcards.html` → Flashcards com ganho de XP
+- `performance.html` → Desempenho detalhado e histórico de atividades
+- `styles.css` → Estilos globais
+- `common.js` → Estado do aluno + sistema de XP via localStorage
+- `index.js`, `dashboard.js`, `listening.js`, `quizzes.js`, `flashcards.js`, `performance.js` → Lógica por página
 
-- **Vocabulário interativo:** botão para gerar palavras/expressões com tradução e exemplo.
-- **Treino de pronúncia:**
-  - ouvir frase em inglês;
-  - falar no microfone;
-  - receber feedback de acurácia por palavras-chave.
-- **Progresso:** acompanhamento de XP, nível e lições concluídas.
-- **Login:**
-  - login/cadastro por email e password (quando Firebase configurado);
-  - login anônimo;
-  - modo local automático quando Firebase não está configurado.
-- **Ranking:**
-  - online com Firebase Realtime Database;
-  - local quando sem Firebase.
+## Requisitos atendidos
 
-## Estrutura do projeto
+- HTML, CSS e JavaScript separados.
+- Layout moderno e simples.
+- Botões estilizados.
+- Arquivos organizados por responsabilidade.
+- Navegação funcional entre todas as páginas.
+- Sistema de XP com atualização no Dashboard.
 
-Atualmente o projeto foi unificado para manter tudo simples:
-
-- `index.html` → HTML + CSS + JavaScript + integração opcional com Firebase.
-
-## Como executar localmente
-
-1. Na raiz do projeto, iniciar servidor local:
+## Como rodar
 
 ```bash
 python3 -m http.server 8000
 ```
 
-2. Abrir no navegador:
+Abra:
 
-```text
-http://127.0.0.1:8000/index.html
-```
+- `http://127.0.0.1:8000/index.html`
 
-## Configuração opcional do Firebase
+## Como funciona o XP
 
-Se quiser habilitar autenticação/ranking online, injete no `window` (ou por template de ambiente) as variáveis:
-
-- `__FIREBASE_API_KEY`
-- `__FIREBASE_AUTH_DOMAIN`
-- `__FIREBASE_PROJECT_ID`
-- `__FIREBASE_STORAGE_BUCKET`
-- `__FIREBASE_MESSAGING_SENDER_ID`
-- `__FIREBASE_APP_ID`
-- `__FIREBASE_DATABASE_URL`
-
-Sem essas variáveis, a aplicação funciona em **modo local** automaticamente.
-
-## Requisitos de navegador
-
-- Chrome / Edge recomendados para melhor suporte de voz.
-- APIs usadas:
-  - `SpeechSynthesis`
-  - `SpeechRecognition` (ou `webkitSpeechRecognition`)
-
-## Licença
-
-Projeto para fins educacionais.
+- Ao concluir atividades (listening, quiz correto, revelar flashcard), o sistema soma XP.
+- XP e progresso são salvos em `localStorage`.
+- O Dashboard e a página de Performance refletem os valores atualizados.
