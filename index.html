@@ -4,278 +4,410 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Laboratório de Inglês - Anne</title>
-
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
-
   <style>
-    body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-    .hero-gradient { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); }
-    .fade-in { animation: fadeIn 0.45s ease-in; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    :root {
+      --primary: #2563eb;
+      --secondary: #0f172a;
+      --surface: #ffffff;
+      --bg: #f8fafc;
+      --hero-overlay: rgba(15, 23, 42, 0.45);
+      --hero-image: none;
+    }
+
+    body {
+      background: var(--bg);
+      color: #0f172a;
+    }
+
+    .hero {
+      background-image:
+        linear-gradient(135deg, var(--hero-overlay), rgba(37, 99, 235, 0.35)),
+        var(--hero-image),
+        linear-gradient(135deg, #1e3a8a, #3b82f6);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(0.93);
+    }
 
     .recording {
-      animation: pulse 1.4s infinite;
+      animation: pulse 1.2s infinite;
       background: #dc2626 !important;
-      color: #fff !important;
+      color: white !important;
     }
+
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.04); }
       100% { transform: scale(1); }
     }
+
+    .score-good { color: #166534; }
+    .score-mid { color: #a16207; }
+    .score-low { color: #b91c1c; }
   </style>
 </head>
-<body class="text-slate-800 bg-slate-50 min-h-screen flex flex-col">
-  <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center gap-4">
-      <div class="text-2xl font-bold text-blue-700">
-        English Lab <span class="text-slate-400 font-light">| Anne</span>
+<body class="min-h-screen">
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <h1 class="text-xl md:text-2xl font-black" style="color: var(--secondary)">English Lab | Anne</h1>
+      <div class="flex gap-2">
+        <button id="openConfigBtn" class="px-3 py-2 rounded-lg border border-slate-300 bg-white font-semibold">⚙️ Configurar Site</button>
+        <button id="speakPageBtn" class="px-3 py-2 rounded-lg btn-primary font-semibold">🔊 Ouvir frase atual</button>
       </div>
-      <div class="space-x-4 md:space-x-6 text-sm md:text-base">
-        <a href="#" class="hover:text-blue-600 font-medium transition">Início</a>
-        <a href="#vocab" class="hover:text-blue-600 font-medium transition">Vocabulário</a>
-        <a href="#pronunciation" class="hover:text-blue-600 font-medium transition">Pronúncia</a>
-        <a href="#links" class="hover:text-blue-600 font-medium transition italic">Links</a>
-      </div>
-    </div>
-  </nav>
-
-  <header class="hero-gradient text-white py-20 px-4 text-center">
-    <div class="max-w-4xl mx-auto">
-      <h1 class="text-4xl md:text-6xl font-extrabold mb-4 italic leading-tight">Welcome to my English Lab!</h1>
-      <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto font-light">
-        Repositório vivo de aprendizagem com vocabulário, treino de pronúncia, ranking e progresso.
-      </p>
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 py-12 flex-grow w-full">
-    <section class="mb-10 bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
-      <h2 class="text-2xl font-bold text-slate-900 mb-1">Conta e progresso</h2>
-      <p class="text-slate-500 text-sm mb-4">Se Firebase estiver configurado, salva ranking em tempo real. Sem Firebase, funciona em modo local.</p>
+  <section class="hero text-white py-16 px-4">
+    <div class="max-w-6xl mx-auto">
+      <h2 id="heroTitle" class="text-4xl md:text-5xl font-extrabold mb-4">Welcome to my English Lab!</h2>
+      <p id="heroSubtitle" class="max-w-3xl text-lg opacity-95">
+        Configure cores, imagem e conteúdo diretamente no site. Pratique escuta, gravação e correção de pronúncia.
+      </p>
+    </div>
+  </section>
 
-      <div class="grid md:grid-cols-2 gap-4 items-start">
-        <div class="space-y-3">
-          <input id="email" type="email" placeholder="Email" class="w-full border rounded-xl px-4 py-3" />
-          <input id="password" type="password" placeholder="Password" class="w-full border rounded-xl px-4 py-3" />
-          <div class="flex flex-wrap gap-2">
-            <button id="login-btn" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-blue-700">Login</button>
-            <button id="register-btn" class="bg-slate-200 text-slate-700 px-5 py-2.5 rounded-xl font-semibold hover:bg-slate-300">Criar conta</button>
-            <button id="anon-btn" class="bg-indigo-100 text-indigo-700 px-5 py-2.5 rounded-xl font-semibold hover:bg-indigo-200">Entrar anônimo</button>
-          </div>
-          <p id="auth-feedback" class="text-sm text-slate-500">Aguardando autenticação.</p>
+  <main class="max-w-6xl mx-auto px-4 py-8 space-y-6">
+    <section class="card p-5">
+      <h3 class="text-2xl font-bold mb-3">As 50 palavras mais usadas (sobre si mesmo)</h3>
+      <p class="text-sm text-slate-500 mb-4">Clique numa palavra para ouvir a pronúncia.</p>
+      <div id="wordsGrid" class="grid grid-cols-2 md:grid-cols-5 gap-2 text-sm"></div>
+    </section>
+
+    <section class="card p-5" id="practiceSection">
+      <div class="flex flex-wrap justify-between items-end gap-3 mb-4">
+        <div>
+          <h3 class="text-2xl font-bold">Treino de Pronúncia com Correção</h3>
+          <p class="text-slate-500 text-sm">Escute, grave e veja score de similaridade da frase.</p>
         </div>
+        <div class="flex flex-wrap gap-2">
+          <label class="text-sm font-medium">Categoria:</label>
+          <select id="categorySelect" class="border rounded-lg px-2 py-1">
+            <option value="short">30 curtas</option>
+            <option value="medium">30 médias</option>
+            <option value="connectors">40 com conectores</option>
+            <option value="all" selected>Todas</option>
+          </select>
+        </div>
+      </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div class="bg-slate-50 p-4 rounded-xl border"><p class="text-xs text-slate-500">Utilizador</p><p id="user-label" class="font-bold">—</p></div>
-          <div class="bg-slate-50 p-4 rounded-xl border"><p class="text-xs text-slate-500">Nível</p><p id="level-label" class="font-bold">1</p></div>
-          <div class="bg-slate-50 p-4 rounded-xl border"><p class="text-xs text-slate-500">XP</p><p id="xp-label" class="font-bold">0</p></div>
-          <div class="bg-slate-50 p-4 rounded-xl border"><p class="text-xs text-slate-500">Lições</p><p id="lessons-label" class="font-bold">0</p></div>
+      <div class="bg-slate-50 border rounded-xl p-4 mb-4">
+        <p id="phraseCounter" class="text-xs uppercase tracking-wider text-slate-500 mb-1">Frase 1</p>
+        <p id="targetPhrase" class="text-2xl font-extrabold">Loading...</p>
+      </div>
+
+      <div class="flex flex-wrap gap-2 mb-3">
+        <button id="listenBtn" class="btn-primary px-4 py-2 rounded-lg font-semibold">🔊 Ouvir</button>
+        <button id="recordBtn" class="px-4 py-2 rounded-lg font-semibold bg-emerald-600 text-white">🎤 Gravar</button>
+        <button id="nextBtn" class="px-4 py-2 rounded-lg font-semibold bg-slate-200">Próxima</button>
+        <button id="shuffleBtn" class="px-4 py-2 rounded-lg font-semibold bg-slate-200">Aleatória</button>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-white border rounded-xl p-3">
+          <p class="text-xs text-slate-500">Você falou:</p>
+          <p id="spokenText" class="font-semibold min-h-10">—</p>
+        </div>
+        <div class="bg-white border rounded-xl p-3">
+          <p class="text-xs text-slate-500">Correção / score:</p>
+          <p id="scoreText" class="font-semibold min-h-10">Ainda sem tentativa.</p>
         </div>
       </div>
     </section>
 
-    <section id="vocab" class="mb-16 text-center bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
-      <h2 class="text-3xl font-bold mb-4 text-slate-900">Meu Vocabulário</h2>
-      <p class="text-slate-600 mb-8 max-w-lg mx-auto">Clica no botão para ver uma expressão que aprendi recentemente.</p>
-
-      <button id="btn-surprise" class="bg-blue-600 text-white px-8 py-4 rounded-full font-bold hover:bg-blue-700 hover:scale-105 transition-all shadow-lg active:scale-95">
-        Gerar Palavra Aleatória
-      </button>
-
-      <div id="display-palavra" class="mt-10 p-8 bg-white rounded-2xl shadow-xl border border-slate-200 hidden max-w-md mx-auto fade-in"></div>
-    </section>
-
-    <section id="pronunciation" class="mb-16 bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
-      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-        <h2 class="text-3xl font-bold text-slate-900">Treino de Pronúncia</h2>
-        <span id="lesson-counter" class="text-sm font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-full">Lição 1 de 5</span>
-      </div>
-
-      <div class="w-full bg-slate-200 rounded-full h-3 mb-6 overflow-hidden">
-        <div id="progress-bar" class="bg-blue-600 h-3 w-0 transition-all duration-300"></div>
-      </div>
-
-      <div class="bg-slate-50 border rounded-xl p-5 mb-4">
-        <p id="lesson-category" class="text-xs uppercase tracking-wider text-blue-700 font-bold mb-1">Category</p>
-        <h3 id="lesson-en" class="text-2xl font-extrabold text-slate-900">Loading...</h3>
-        <p id="lesson-pt" class="text-slate-600 mt-1">Carregando frase...</p>
-      </div>
-
-      <div class="flex flex-wrap gap-3 mb-4">
-        <button id="listen-btn" class="bg-blue-600 text-white px-5 py-3 rounded-xl font-semibold hover:bg-blue-700">🔊 Ouvir</button>
-        <button id="speak-btn" class="bg-emerald-600 text-white px-5 py-3 rounded-xl font-semibold hover:bg-emerald-700">🎤 Falar</button>
-        <button id="next-btn" class="bg-slate-200 text-slate-700 px-5 py-3 rounded-xl font-semibold hover:bg-slate-300">Próxima</button>
-      </div>
-
-      <div id="feedback" class="hidden rounded-xl p-4 text-sm font-semibold"></div>
-      <p class="mt-4 text-slate-500 text-sm">Resultado reconhecido:</p>
-      <p id="speech-result" class="mt-1 text-slate-800 font-medium">—</p>
-    </section>
-
-    <section class="mb-16 bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
-      <h2 class="text-2xl font-bold text-slate-900 mb-3">Ranking (tempo real/local)</h2>
-      <ol id="ranking-list" class="space-y-2"></ol>
-    </section>
-
-    <section id="links" class="grid md:grid-cols-3 gap-6">
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-        <h3 class="font-bold text-blue-800 mb-2">📖 Dicionário</h3>
-        <p class="text-sm text-slate-500 mb-4">Uso o Cambridge para definições reais.</p>
-        <a href="https://dictionary.cambridge.org/" target="_blank" class="text-blue-600 font-semibold hover:underline text-sm">Aceder &rarr;</a>
-      </div>
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-        <h3 class="font-bold text-blue-800 mb-2">🎥 YouGlish</h3>
-        <p class="text-sm text-slate-500 mb-4">Para ouvir como os nativos pronunciam.</p>
-        <a href="https://youglish.com/" target="_blank" class="text-blue-600 font-semibold hover:underline text-sm">Aceder &rarr;</a>
-      </div>
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-        <h3 class="font-bold text-blue-800 mb-2">✍️ Grammarly</h3>
-        <p class="text-sm text-slate-500 mb-4">Para corrigir a minha escrita.</p>
-        <a href="https://www.grammarly.com/" target="_blank" class="text-blue-600 font-semibold hover:underline text-sm">Aceder &rarr;</a>
+    <section class="card p-5">
+      <h3 class="text-2xl font-bold mb-3">Banco de frases completo</h3>
+      <div class="grid md:grid-cols-3 gap-3 text-sm">
+        <div>
+          <h4 class="font-bold mb-2">30 Frases Curtas</h4>
+          <ol id="shortList" class="list-decimal pl-5 space-y-1"></ol>
+        </div>
+        <div>
+          <h4 class="font-bold mb-2">30 Frases Médias</h4>
+          <ol id="mediumList" class="list-decimal pl-5 space-y-1"></ol>
+        </div>
+        <div>
+          <h4 class="font-bold mb-2">40 com Conectores</h4>
+          <ol id="connectorsList" class="list-decimal pl-5 space-y-1"></ol>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="bg-white border-t border-slate-200 text-center py-10 text-slate-400 text-sm mt-auto">
-    <p>"The limits of my language mean the limits of my world."</p>
-    <p class="mt-2 font-bold text-slate-500">&copy; 2024 Laboratório de Inglês da Anne</p>
-  </footer>
+  <aside id="configPanel" class="fixed top-0 right-0 h-full w-full max-w-md bg-white border-l border-slate-200 shadow-2xl p-5 overflow-y-auto translate-x-full transition-transform duration-300 z-40">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-xl font-bold">Configuração do Site</h3>
+      <button id="closeConfigBtn" class="px-2 py-1 rounded border">✕</button>
+    </div>
 
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      signInAnonymously,
-      onAuthStateChanged
-    } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
-    import {
-      getDatabase,
-      ref,
-      set,
-      update,
-      onValue,
-      query,
-      orderByChild,
-      limitToLast
-    } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js';
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Cor principal</label>
+        <input id="primaryColorInput" type="color" class="w-full h-10" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Cor secundária (título)</label>
+        <input id="secondaryColorInput" type="color" class="w-full h-10" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">URL imagem de fundo (hero)</label>
+        <input id="heroImageInput" type="text" placeholder="https://..." class="w-full border rounded-lg px-3 py-2" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Título principal</label>
+        <input id="heroTitleInput" type="text" class="w-full border rounded-lg px-3 py-2" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Subtítulo</label>
+        <textarea id="heroSubtitleInput" class="w-full border rounded-lg px-3 py-2" rows="3"></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Adicionar frase personalizada</label>
+        <input id="customPhraseInput" type="text" placeholder="Ex: I am improving every day." class="w-full border rounded-lg px-3 py-2" />
+        <button id="addCustomPhraseBtn" class="mt-2 btn-primary px-3 py-2 rounded-lg">Adicionar à categoria atual</button>
+      </div>
+      <div class="flex gap-2">
+        <button id="saveConfigBtn" class="btn-primary px-4 py-2 rounded-lg font-semibold">Salvar</button>
+        <button id="resetConfigBtn" class="px-4 py-2 rounded-lg border font-semibold">Resetar</button>
+      </div>
+      <p class="text-xs text-slate-500">As configurações ficam salvas no navegador (localStorage).</p>
+    </div>
+  </aside>
 
-    // ===== Dados =====
-    const palavras = [
-      { eng: 'Nevertheless', pt: 'Ainda assim / No entanto', ex: 'It was raining; nevertheless, we went for a walk.' },
-      { eng: 'Insight', pt: 'Percepção / Visão profunda', ex: 'The book gives us a digital insight into the future.' },
-      { eng: 'To overcome', pt: 'Superar / Vencer', ex: 'She managed to overcome her fear of heights.' },
-      { eng: 'Grateful', pt: 'Grato / Agradecido', ex: 'I am grateful for all your support.' },
-      { eng: 'Breakthrough', pt: 'Avanço / Descoberta', ex: 'Scientists have made a major breakthrough in the research.' },
-      { eng: 'Achieve', pt: 'Alcançar / Conquistar', ex: 'You can achieve anything with hard work.' }
+  <script>
+    const WORDS = [
+      'I','Me','My','Mine','Myself','Am','Was','Have','Had','Do','Can','Will','Want','Need','Like','Love','Feel','Think','Know','Believe','Hope','Live','Work','Study','Go','Good','Happy','Tired','Busy','Name','Home','Family','Friend','Job','Time','Day','Life','Person','People','Things','Always','Never','Sometimes','Very','Really','Also','But','Because','So','With'
     ];
 
-    const lessons = [
-      { en: 'Hi, I am new here.', pt: 'Oi, eu sou novo aqui.', keywords: ['hi', 'new', 'here'], cat: 'Greetings' },
-      { en: 'My name is Anne.', pt: 'O meu nome é Anne.', keywords: ['name', 'anne'], cat: 'Self Intro' },
-      { en: 'I am from Portugal.', pt: 'Eu sou de Portugal.', keywords: ['from', 'portugal'], cat: 'Origin' },
-      { en: 'I am a student.', pt: 'Eu sou estudante.', keywords: ['student'], cat: 'Occupation' },
-      { en: 'I love music and sports.', pt: 'Eu adoro música e desporto.', keywords: ['love', 'music', 'sports'], cat: 'Hobbies' }
+    const SHORT_PHRASES = [
+      'I am happy.', 'I love music.', 'My name is...', 'I need help.', 'I feel tired.', 'I live here.', 'This is mine.', 'I am busy.', 'I work hard.', 'I like coffee.',
+      'I can cook.', 'Time is short.', 'I am ready.', 'My family matters.', 'I study English.', 'I am home.', 'I want that.', 'I feel good.', 'I have time.', 'I did it.',
+      'See me now.', 'I am cold.', 'My dog plays.', 'I know him.', 'I hate waiting.', 'I believe you.', 'Life is good.', 'I am student.', 'Help me please.', 'I go now.'
     ];
+
+    const MEDIUM_PHRASES = [
+      'I really love my job.', 'I am a very busy person.', 'My family lives in Brazil.', 'I want to travel soon.', 'I need to sleep now.', 'I feel happy today, thanks.',
+      'I have a big green car.', 'My house is very small.', 'I study every single day.', "I don't know the answer.", 'I am drinking some water.', 'My friend is very tall.',
+      'I always wake up early.', 'I like to eat pasta.', 'I was born in July.', 'I am learning new things.', 'My mother is a teacher.', 'I have two young brothers.',
+      'I want a new phone.', 'I am waiting for you.', 'My favorite color is blue.', 'I hope to see you.', 'I can speak a little.', 'I work at the bank.',
+      'I am proud of myself.', 'I think about my future.', 'My cat sleeps all day.', 'I enjoy reading good books.', 'I am listening to music.', 'I have many great friends.'
+    ];
+
+    const CONNECTOR_PHRASES = [
+      "I am tired but I'm happy.", 'I study because I want more.', "I am hungry so I'll eat.", 'I like tea and also coffee.', 'I work hard but I rest.',
+      'I am late so I run.', "I stay home because it's raining.", 'I have a car and a bike.', 'I love dogs but not cats.', 'I am sick so I stay.',
+      'I learn fast because I practice.', 'I am tall and also strong.', 'I want money so I work.', "I like her but she's shy.", "I read books because they're good.",
+      'I am calm and very patient.', 'I lost my key so sad.', 'I go out but I return.', 'I exercise because it is healthy.', 'I speak English and also Spanish.',
+      "I am free so let's go.", 'I tried but I failed today.', 'I sing because I am happy.', 'I have dreams and big goals.', 'I am alone but not lonely.',
+      'I am smart so I win.', 'I cry because I am human.', 'I cook well and also clean.', 'I need rest so I sleep.', 'I like winter but love summer.',
+      'I study because I need knowledge.', "I am here and I'm ready.", "I forgot it so I'm sorry.", 'I play games but I study.', 'I travel because I love nature.',
+      'I am young and also brave.', 'I am broke so I save.', 'I smile but I am nervous.', "I help people because it's right.", 'I write poems and also stories.'
+    ];
+
+    const DEFAULT_CONFIG = {
+      primary: '#2563eb',
+      secondary: '#0f172a',
+      heroImage: '',
+      heroTitle: 'Welcome to my English Lab!',
+      heroSubtitle: 'Configure cores, imagem e conteúdo diretamente no site. Pratique escuta, gravação e correção de pronúncia.',
+      customPhrases: {
+        short: [],
+        medium: [],
+        connectors: []
+      }
+    };
 
     const state = {
-      currentLesson: 0,
-      xp: 0,
-      lessonsCompleted: 0,
-      streak: 0,
-      uid: null,
-      email: null,
-      localRanking: []
+      config: structuredClone(DEFAULT_CONFIG),
+      category: 'all',
+      index: 0,
+      phrases: []
     };
 
-    // ===== UI refs =====
     const el = {
-      email: document.getElementById('email'),
-      password: document.getElementById('password'),
-      loginBtn: document.getElementById('login-btn'),
-      registerBtn: document.getElementById('register-btn'),
-      anonBtn: document.getElementById('anon-btn'),
-      authFeedback: document.getElementById('auth-feedback'),
-      userLabel: document.getElementById('user-label'),
-      levelLabel: document.getElementById('level-label'),
-      xpLabel: document.getElementById('xp-label'),
-      lessonsLabel: document.getElementById('lessons-label'),
-      lessonCounter: document.getElementById('lesson-counter'),
-      progressBar: document.getElementById('progress-bar'),
-      lessonCategory: document.getElementById('lesson-category'),
-      lessonEn: document.getElementById('lesson-en'),
-      lessonPt: document.getElementById('lesson-pt'),
-      listenBtn: document.getElementById('listen-btn'),
-      speakBtn: document.getElementById('speak-btn'),
-      nextBtn: document.getElementById('next-btn'),
-      feedback: document.getElementById('feedback'),
-      speechResult: document.getElementById('speech-result'),
-      rankingList: document.getElementById('ranking-list'),
-      btnSurprise: document.getElementById('btn-surprise'),
-      displayPalavra: document.getElementById('display-palavra')
+      heroTitle: document.getElementById('heroTitle'),
+      heroSubtitle: document.getElementById('heroSubtitle'),
+      speakPageBtn: document.getElementById('speakPageBtn'),
+      wordsGrid: document.getElementById('wordsGrid'),
+      categorySelect: document.getElementById('categorySelect'),
+      phraseCounter: document.getElementById('phraseCounter'),
+      targetPhrase: document.getElementById('targetPhrase'),
+      spokenText: document.getElementById('spokenText'),
+      scoreText: document.getElementById('scoreText'),
+      listenBtn: document.getElementById('listenBtn'),
+      recordBtn: document.getElementById('recordBtn'),
+      nextBtn: document.getElementById('nextBtn'),
+      shuffleBtn: document.getElementById('shuffleBtn'),
+      shortList: document.getElementById('shortList'),
+      mediumList: document.getElementById('mediumList'),
+      connectorsList: document.getElementById('connectorsList'),
+      configPanel: document.getElementById('configPanel'),
+      openConfigBtn: document.getElementById('openConfigBtn'),
+      closeConfigBtn: document.getElementById('closeConfigBtn'),
+      primaryColorInput: document.getElementById('primaryColorInput'),
+      secondaryColorInput: document.getElementById('secondaryColorInput'),
+      heroImageInput: document.getElementById('heroImageInput'),
+      heroTitleInput: document.getElementById('heroTitleInput'),
+      heroSubtitleInput: document.getElementById('heroSubtitleInput'),
+      customPhraseInput: document.getElementById('customPhraseInput'),
+      addCustomPhraseBtn: document.getElementById('addCustomPhraseBtn'),
+      saveConfigBtn: document.getElementById('saveConfigBtn'),
+      resetConfigBtn: document.getElementById('resetConfigBtn')
     };
 
-    // ===== Firebase (opcional) =====
-    const firebaseConfig = {
-      apiKey: window.__FIREBASE_API_KEY || '',
-      authDomain: window.__FIREBASE_AUTH_DOMAIN || '',
-      projectId: window.__FIREBASE_PROJECT_ID || '',
-      storageBucket: window.__FIREBASE_STORAGE_BUCKET || '',
-      messagingSenderId: window.__FIREBASE_MESSAGING_SENDER_ID || '',
-      appId: window.__FIREBASE_APP_ID || '',
-      databaseURL: window.__FIREBASE_DATABASE_URL || ''
-    };
-
-    const firebaseEnabled = Boolean(firebaseConfig.apiKey && firebaseConfig.appId);
-    let auth = null;
-    let db = null;
-
-    if (firebaseEnabled) {
-      const app = initializeApp(firebaseConfig);
-      auth = getAuth(app);
-      db = getDatabase(app);
-      el.authFeedback.textContent = 'Firebase ativo.';
-    } else {
-      el.authFeedback.textContent = 'Modo local ativo (Firebase não configurado).';
+    function loadConfig() {
+      try {
+        const raw = localStorage.getItem('anneEnglishLabConfig');
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        state.config = {
+          ...structuredClone(DEFAULT_CONFIG),
+          ...parsed,
+          customPhrases: {
+            ...structuredClone(DEFAULT_CONFIG.customPhrases),
+            ...(parsed.customPhrases || {})
+          }
+        };
+      } catch {
+        state.config = structuredClone(DEFAULT_CONFIG);
+      }
     }
 
-    // ===== Funções utilitárias =====
-    const levelFromXp = () => Math.floor(state.xp / 100) + 1;
-
-    function normalize(text) {
-      return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z\s]/g, '').replace(/\s+/g, ' ').trim();
+    function saveConfig() {
+      localStorage.setItem('anneEnglishLabConfig', JSON.stringify(state.config));
     }
 
-    function setFeedback(message, type = 'success') {
-      el.feedback.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-700', 'border', 'border-emerald-200', 'bg-rose-50', 'text-rose-700', 'border-rose-200');
-      el.feedback.classList.add(type === 'success' ? 'bg-emerald-50' : 'bg-rose-50');
-      el.feedback.classList.add(type === 'success' ? 'text-emerald-700' : 'text-rose-700');
-      el.feedback.classList.add('border', type === 'success' ? 'border-emerald-200' : 'border-rose-200');
-      el.feedback.textContent = message;
+    function applyThemeAndContent() {
+      document.documentElement.style.setProperty('--primary', state.config.primary);
+      document.documentElement.style.setProperty('--secondary', state.config.secondary);
+      document.documentElement.style.setProperty('--hero-image', state.config.heroImage ? `url("${state.config.heroImage}")` : 'none');
+      el.heroTitle.textContent = state.config.heroTitle;
+      el.heroSubtitle.textContent = state.config.heroSubtitle;
     }
 
-    function updateUI() {
-      const lesson = lessons[state.currentLesson];
-      el.lessonCategory.textContent = lesson.cat;
-      el.lessonEn.textContent = lesson.en;
-      el.lessonPt.textContent = lesson.pt;
-      el.lessonCounter.textContent = `Lição ${state.currentLesson + 1} de ${lessons.length}`;
-      el.progressBar.style.width = `${(state.currentLesson / lessons.length) * 100}%`;
+    function syncConfigInputs() {
+      el.primaryColorInput.value = state.config.primary;
+      el.secondaryColorInput.value = state.config.secondary;
+      el.heroImageInput.value = state.config.heroImage;
+      el.heroTitleInput.value = state.config.heroTitle;
+      el.heroSubtitleInput.value = state.config.heroSubtitle;
+    }
 
-      el.userLabel.textContent = state.email || 'Anónimo';
-      el.xpLabel.textContent = String(state.xp);
-      el.levelLabel.textContent = String(levelFromXp());
-      el.lessonsLabel.textContent = String(state.lessonsCompleted);
+    function allPhrasesByCategory() {
+      return {
+        short: [...SHORT_PHRASES, ...state.config.customPhrases.short],
+        medium: [...MEDIUM_PHRASES, ...state.config.customPhrases.medium],
+        connectors: [...CONNECTOR_PHRASES, ...state.config.customPhrases.connectors]
+      };
+    }
+
+    function getActivePhrases() {
+      const base = allPhrasesByCategory();
+      if (state.category === 'short') return base.short;
+      if (state.category === 'medium') return base.medium;
+      if (state.category === 'connectors') return base.connectors;
+      return [...base.short, ...base.medium, ...base.connectors];
+    }
+
+    function renderPhraseBank() {
+      const base = allPhrasesByCategory();
+      el.shortList.innerHTML = base.short.map((x) => `<li>${x}</li>`).join('');
+      el.mediumList.innerHTML = base.medium.map((x) => `<li>${x}</li>`).join('');
+      el.connectorsList.innerHTML = base.connectors.map((x) => `<li>${x}</li>`).join('');
+    }
+
+    function refreshTrainer(resetIndex = true) {
+      state.phrases = getActivePhrases();
+      if (!state.phrases.length) {
+        el.targetPhrase.textContent = 'Sem frases nesta categoria.';
+        el.phraseCounter.textContent = 'Frase 0 de 0';
+        return;
+      }
+      if (resetIndex) state.index = 0;
+      if (state.index >= state.phrases.length) state.index = 0;
+      renderCurrentPhrase();
+    }
+
+    function renderCurrentPhrase() {
+      const phrase = state.phrases[state.index];
+      el.targetPhrase.textContent = phrase;
+      el.phraseCounter.textContent = `Frase ${state.index + 1} de ${state.phrases.length}`;
+    }
+
+    function normalize(txt) {
+      return txt
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z\s]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function levenshtein(a, b) {
+      const m = a.length;
+      const n = b.length;
+      const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+      for (let i = 0; i <= m; i++) dp[i][0] = i;
+      for (let j = 0; j <= n; j++) dp[0][j] = j;
+      for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+          const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+          dp[i][j] = Math.min(
+            dp[i - 1][j] + 1,
+            dp[i][j - 1] + 1,
+            dp[i - 1][j - 1] + cost
+          );
+        }
+      }
+      return dp[m][n];
+    }
+
+    function similarityPercent(spoken, target) {
+      const s = normalize(spoken);
+      const t = normalize(target);
+      if (!s && !t) return 100;
+      if (!s || !t) return 0;
+      const dist = levenshtein(s, t);
+      const maxLen = Math.max(s.length, t.length) || 1;
+      return Math.max(0, Math.round((1 - dist / maxLen) * 100));
+    }
+
+    function scoreClass(score) {
+      if (score >= 80) return 'score-good';
+      if (score >= 55) return 'score-mid';
+      return 'score-low';
+    }
+
+    function setCorrection(spoken) {
+      const target = state.phrases[state.index] || '';
+      const score = similarityPercent(spoken, target);
+      const cls = scoreClass(score);
+      let label = 'Continue praticando.';
+      if (score >= 80) label = 'Excelente pronúncia!';
+      else if (score >= 55) label = 'Boa, mas dá para melhorar.';
+
+      el.spokenText.textContent = spoken || '—';
+      el.scoreText.innerHTML = `${label} <span class="${cls}">Score: ${score}%</span><br><span class="text-xs text-slate-500">Esperado: ${target}</span>`;
     }
 
     function speak(text) {
-      if (!('speechSynthesis' in window)) {
-        setFeedback('Este navegador não suporta síntese de voz.', 'error');
-        return;
-      }
+      if (!('speechSynthesis' in window)) return;
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = 'en-US';
       utter.rate = 0.9;
@@ -283,138 +415,6 @@
       window.speechSynthesis.speak(utter);
     }
 
-    function addXP(points) {
-      state.xp += points;
-      updateUI();
-      syncStats();
-    }
-
-    function nextLesson() {
-      state.currentLesson = (state.currentLesson + 1) % lessons.length;
-      updateUI();
-    }
-
-    function renderRanking(items) {
-      if (!items.length) {
-        el.rankingList.innerHTML = '<li class="text-slate-500">Sem ranking ainda.</li>';
-        return;
-      }
-      el.rankingList.innerHTML = items.map((p, i) => {
-        const isMe = p.uid === state.uid;
-        return `
-          <li class="${isMe ? 'bg-yellow-50 border-yellow-200' : 'bg-slate-50 border-slate-200'} border rounded-xl px-4 py-2 flex justify-between">
-            <span>#${i + 1} ${p.email || 'anonymous'}</span>
-            <strong>${p.xp ?? 0} XP</strong>
-          </li>`;
-      }).join('');
-    }
-
-    function renderLocalRanking() {
-      const sorted = [...state.localRanking].sort((a, b) => (b.xp ?? 0) - (a.xp ?? 0)).slice(0, 10);
-      renderRanking(sorted);
-    }
-
-    function syncStats() {
-      if (!state.uid) return;
-      const payload = {
-        uid: state.uid,
-        email: state.email || 'anonymous',
-        xp: state.xp,
-        lessonsCompleted: state.lessonsCompleted,
-        streak: state.streak,
-        updatedAt: Date.now()
-      };
-
-      if (!firebaseEnabled) {
-        const idx = state.localRanking.findIndex((x) => x.uid === state.uid);
-        if (idx >= 0) state.localRanking[idx] = payload;
-        else state.localRanking.push(payload);
-        renderLocalRanking();
-        return;
-      }
-
-      update(ref(db, `rankings/${state.uid}`), payload).catch(() => {
-        setFeedback('Falha ao sincronizar com Firebase.', 'error');
-      });
-    }
-
-    function subscribeRanking() {
-      if (!firebaseEnabled) {
-        renderLocalRanking();
-        return;
-      }
-      const rankingsRef = query(ref(db, 'rankings'), orderByChild('xp'), limitToLast(20));
-      onValue(rankingsRef, (snapshot) => {
-        const val = snapshot.val() || {};
-        const list = Object.values(val).sort((a, b) => (b.xp ?? 0) - (a.xp ?? 0)).slice(0, 10);
-        renderRanking(list);
-      });
-    }
-
-    // ===== Autenticação =====
-    async function loginOrRegister(mode) {
-      const email = el.email.value.trim();
-      const password = el.password.value.trim();
-      if (!email || !password) {
-        el.authFeedback.textContent = 'Preencha email e password.';
-        return;
-      }
-
-      if (!firebaseEnabled) {
-        state.uid = `local-${email}`;
-        state.email = email;
-        el.authFeedback.textContent = 'Entrou em modo local.';
-        updateUI();
-        syncStats();
-        return;
-      }
-
-      try {
-        if (mode === 'register') {
-          await createUserWithEmailAndPassword(auth, email, password);
-        } else {
-          await signInWithEmailAndPassword(auth, email, password);
-        }
-        el.authFeedback.textContent = 'Autenticado com sucesso.';
-      } catch (err) {
-        el.authFeedback.textContent = `Erro: ${err.message}`;
-      }
-    }
-
-    async function loginAnonymous() {
-      if (!firebaseEnabled) {
-        state.uid = 'local-anonymous';
-        state.email = 'anonymous@local';
-        el.authFeedback.textContent = 'Entrou como anónimo (local).';
-        updateUI();
-        syncStats();
-        return;
-      }
-      try {
-        await signInAnonymously(auth);
-      } catch (err) {
-        el.authFeedback.textContent = `Erro no login anónimo: ${err.message}`;
-      }
-    }
-
-    if (firebaseEnabled) {
-      onAuthStateChanged(auth, async (user) => {
-        if (!user) return;
-        state.uid = user.uid;
-        state.email = user.email || 'anonymous@firebase';
-        updateUI();
-        await set(ref(db, `rankings/${state.uid}`), {
-          uid: state.uid,
-          email: state.email,
-          xp: state.xp,
-          lessonsCompleted: state.lessonsCompleted,
-          streak: state.streak,
-          createdAt: Date.now()
-        });
-      });
-    }
-
-    // ===== Speech Recognition =====
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = SpeechRecognition ? new SpeechRecognition() : null;
 
@@ -424,79 +424,116 @@
       recognition.maxAlternatives = 1;
 
       recognition.onstart = () => {
-        el.speakBtn.classList.add('recording');
-        setFeedback('A ouvir... fale agora.', 'success');
+        el.recordBtn.classList.add('recording');
       };
-
-      recognition.onresult = (event) => {
-        const speech = event.results?.[0]?.[0]?.transcript?.trim() || '';
-        el.speechResult.textContent = speech || 'Sem resultado reconhecido.';
-
-        const normalizedSpeech = normalize(speech);
-        const current = lessons[state.currentLesson];
-        const hits = current.keywords.filter((k) => normalizedSpeech.includes(k));
-        const score = current.keywords.length ? Math.round((hits.length / current.keywords.length) * 100) : 0;
-
-        if (score >= 60) {
-          state.lessonsCompleted += 1;
-          state.streak = Math.max(1, state.streak + 1);
-          addXP(25);
-          setFeedback(`Excelente! Precisão aproximada: ${score}%.`, 'success');
-        } else {
-          addXP(5);
-          setFeedback(`Continue praticando. Precisão aproximada: ${score}%.`, 'error');
-        }
-      };
-
-      recognition.onerror = (event) => {
-        setFeedback(`Erro no reconhecimento: ${event.error}`, 'error');
-      };
-
       recognition.onend = () => {
-        el.speakBtn.classList.remove('recording');
+        el.recordBtn.classList.remove('recording');
+      };
+      recognition.onerror = (event) => {
+        el.spokenText.textContent = `Erro: ${event.error}`;
+      };
+      recognition.onresult = (event) => {
+        const spoken = event.results?.[0]?.[0]?.transcript?.trim() || '';
+        setCorrection(spoken);
       };
     }
 
-    // ===== Eventos =====
-    el.btnSurprise.addEventListener('click', () => {
-      const sorteio = palavras[Math.floor(Math.random() * palavras.length)];
-      el.displayPalavra.classList.remove('hidden');
-      el.displayPalavra.innerHTML = `
-        <span class="text-blue-600 font-bold uppercase tracking-widest text-xs">Vocabulary</span>
-        <h3 class="text-3xl font-black text-slate-900 mt-2">${sorteio.eng}</h3>
-        <p class="text-lg text-blue-700 font-medium mt-1">${sorteio.pt}</p>
-        <hr class="my-4 border-slate-100">
-        <p class="text-slate-500 italic">"${sorteio.ex}"</p>
-      `;
-      el.displayPalavra.classList.remove('fade-in');
-      void el.displayPalavra.offsetWidth;
-      el.displayPalavra.classList.add('fade-in');
-    });
+    function renderWords() {
+      el.wordsGrid.innerHTML = WORDS.map((word, idx) => `
+        <button class="text-left px-3 py-2 rounded-lg border hover:bg-slate-50" data-word="${word}">
+          <span class="text-xs text-slate-400 mr-1">${idx + 1}.</span>${word}
+        </button>
+      `).join('');
+    }
 
-    el.loginBtn.addEventListener('click', () => loginOrRegister('login'));
-    el.registerBtn.addEventListener('click', () => loginOrRegister('register'));
-    el.anonBtn.addEventListener('click', loginAnonymous);
+    function bindEvents() {
+      el.openConfigBtn.addEventListener('click', () => {
+        el.configPanel.classList.remove('translate-x-full');
+      });
+      el.closeConfigBtn.addEventListener('click', () => {
+        el.configPanel.classList.add('translate-x-full');
+      });
 
-    el.listenBtn.addEventListener('click', () => speak(lessons[state.currentLesson].en));
-    el.speakBtn.addEventListener('click', () => {
-      if (!recognition) {
-        setFeedback('Seu navegador não suporta reconhecimento de voz. Use Chrome/Edge.', 'error');
-        return;
-      }
-      try {
-        recognition.start();
-      } catch {
-        setFeedback('Reconhecimento já em execução.', 'error');
-      }
-    });
-    el.nextBtn.addEventListener('click', nextLesson);
+      el.saveConfigBtn.addEventListener('click', () => {
+        state.config.primary = el.primaryColorInput.value;
+        state.config.secondary = el.secondaryColorInput.value;
+        state.config.heroImage = el.heroImageInput.value.trim();
+        state.config.heroTitle = el.heroTitleInput.value.trim() || DEFAULT_CONFIG.heroTitle;
+        state.config.heroSubtitle = el.heroSubtitleInput.value.trim() || DEFAULT_CONFIG.heroSubtitle;
+        applyThemeAndContent();
+        saveConfig();
+      });
 
-    // init
-    state.uid = 'local-guest';
-    state.email = 'guest@local';
-    subscribeRanking();
-    updateUI();
-    syncStats();
+      el.resetConfigBtn.addEventListener('click', () => {
+        state.config = structuredClone(DEFAULT_CONFIG);
+        applyThemeAndContent();
+        syncConfigInputs();
+        saveConfig();
+        renderPhraseBank();
+        refreshTrainer(true);
+      });
+
+      el.addCustomPhraseBtn.addEventListener('click', () => {
+        const text = el.customPhraseInput.value.trim();
+        if (!text) return;
+        const cat = state.category === 'all' ? 'short' : state.category;
+        state.config.customPhrases[cat].push(text);
+        el.customPhraseInput.value = '';
+        saveConfig();
+        renderPhraseBank();
+        refreshTrainer(false);
+      });
+
+      el.categorySelect.addEventListener('change', () => {
+        state.category = el.categorySelect.value;
+        refreshTrainer(true);
+      });
+
+      el.listenBtn.addEventListener('click', () => speak(state.phrases[state.index] || ''));
+      el.speakPageBtn.addEventListener('click', () => speak(state.phrases[state.index] || ''));
+
+      el.recordBtn.addEventListener('click', () => {
+        if (!recognition) {
+          el.spokenText.textContent = 'SpeechRecognition não suportado (use Chrome/Edge).';
+          return;
+        }
+        try {
+          recognition.start();
+        } catch {
+          // ignore already started
+        }
+      });
+
+      el.nextBtn.addEventListener('click', () => {
+        if (!state.phrases.length) return;
+        state.index = (state.index + 1) % state.phrases.length;
+        renderCurrentPhrase();
+      });
+
+      el.shuffleBtn.addEventListener('click', () => {
+        if (!state.phrases.length) return;
+        state.index = Math.floor(Math.random() * state.phrases.length);
+        renderCurrentPhrase();
+      });
+
+      el.wordsGrid.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-word]');
+        if (!btn) return;
+        speak(btn.dataset.word);
+      });
+    }
+
+    function init() {
+      loadConfig();
+      applyThemeAndContent();
+      syncConfigInputs();
+      renderWords();
+      renderPhraseBank();
+      refreshTrainer(true);
+      bindEvents();
+    }
+
+    init();
   </script>
 </body>
 </html>
