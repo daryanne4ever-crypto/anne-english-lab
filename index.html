@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6a0dad" />
+  <title>English Learning Lab</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo-dot"></div>
+      <div>
+        <strong>Teacher Auntie</strong>
+        <p>English Learning Lab</p>
+      </div>
+    </div>
+    <div id="user-badge">Not logged</div>
+  </header>
+
+  <main id="app">
+    <section class="card overlay" id="login-overlay">
+      <h1>Welcome to the English Learning Lab!</h1>
+      <p>Entre com sua conta para salvar progresso e ranking.</p>
+      <input type="email" id="email" placeholder="Email" autocomplete="email" />
+      <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+      <div class="row">
+        <button class="button" id="login-button">Login</button>
+        <button class="button secondary" id="register-button">Criar conta</button>
+      </div>
+      <p class="small" id="auth-feedback"></p>
+      <p class="small">Sem Firebase configurado? O app funciona em modo local.</p>
+    </section>
+
+    <section class="stats card">
+      <div><strong>XP:</strong> <span id="xp">0</span></div>
+      <div><strong>Nível:</strong> <span id="level">1</span></div>
+      <div><strong>Lições:</strong> <span id="lessons">0</span></div>
+      <div><strong>Streak:</strong> <span id="streak">0</span></div>
+    </section>
+
+    <section class="card" id="lesson-card">
+      <span class="badge" id="lesson-category">Self Intro</span>
+      <h2 id="lesson-title">Clique em "Ouvir" para começar</h2>
+      <p id="lesson-translation">Use o microfone para praticar pronúncia.</p>
+
+      <div class="progress-track">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <div class="row wrap">
+        <button class="button" id="listen-btn">🔊 Ouvir frase</button>
+        <button class="button" id="start-recording">🎤 Falar</button>
+        <button class="button secondary" id="next-btn">Próxima</button>
+      </div>
+
+      <div class="feedback" id="feedback-box"></div>
+      <h3>Your Speech Recognition Result:</h3>
+      <p id="result">Nenhuma fala registrada.</p>
+    </section>
+
+    <section class="card" id="ranking-container">
+      <h2>Real-time Firebase Ranking</h2>
+      <ol id="rankings" class="ranking-list"></ol>
+    </section>
+  </main>
+
+  <nav>
+    <a href="#lesson-card">Estudar</a>
+    <a href="#ranking-container">Ranking</a>
+    <a href="#login-overlay">Conta</a>
+  </nav>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
