@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 0: Pronunciation Bootcamp</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #16a34a;
+            --error: #dc2626;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .quiz-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            width: 95%;
+            max-width: 550px;
+            text-align: center;
+        }
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: .85rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .bar-bg {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        #barFill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: 0.4s ease;
+        }
+        #sentence {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.4;
+        }
+        .phonetic {
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: normal;
+            margin-top: 8px;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .speed-control {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #64748b;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+        .btn-listen { background: #eff6ff; color: var(--primary); flex: 1; }
+        .btn-record { background: var(--primary); color: white; flex: 2; }
+        .btn-next { background: #e2e8f0; color: #475569; }
+        
+        .recording {
+            background: var(--error) !important;
+            animation: pulse 1.2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        #feedback { margin-top: 15px; font-weight: 700; min-height: 24px; }
+        .transcript-box {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #475569;
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 12px;
+        }
+        .speed-btn {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .speed-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-card" id="mainCard">
+    <div class="progress-info">
+        <span id="counterText">Loading...</span>
+        <span id="scoreText">Correct: 0</span>
+    </div>
+
+    <div class="bar-bg"><div id="barFill"></div></div>
+
+    <div id="sentence">
+        <div id="phraseDisplay">Loading challenge...</div>
+        <div id="phoneticDisplay" class="phonetic"></div>
+    </div>
+
+    <div class="controls">
+        <div class="speed-control">
+            <span>Voice Speed:</span>
+            <div id="speedNormal" class="speed-btn active" onclick="setSpeed(0.9, 'Normal')">Normal</div>
+            <div id="speedSlow" class="speed-btn" onclick="setSpeed(0.5, 'Slow')">Slow 🐢</div>
+        </div>
+        
+        <div class="btn-group">
+            <button class="btn-listen" onclick="speakText()">🔊 Listen</button>
+            <button id="recordBtn" class="btn-record" onclick="startMic()">🎤 Speak</button>
+            <button class="btn-next" onclick="nextStep()">Next ➡</button>
+        </div>
+    </div>
+
+    <div id="feedback"></div>
+    <div id="transcript" class="transcript-box">Click 'Speak' to start.</div>
+</div>
+
+<script>
+    // LISTA COMPLETA UNIT 0 - 50 ITENS
+    const practiceData = [
+        {text: "A", ipa: "/eɪ/"}, {text: "E", ipa: "/iː/"}, {text: "I", ipa: "/aɪ/"}, 
+        {text: "G", ipa: "/dʒiː/"}, {text: "J", ipa: "/dʒeɪ/"}, {text: "H", ipa: "/eɪtʃ/"}, 
+        {text: "R", ipa: "/ɑːr/"}, {text: "W", ipa: "/ˈdʌbəl.juː/"}, {text: "Hello", ipa: "/həˈloʊ/"}, 
+        {text: "Good morning", ipa: "/ɡʊd ˈmɔːrnɪŋ/"}, {text: "Red", ipa: "/red/"}, {text: "Blue", ipa: "/bluː/"}, 
+        {text: "Black", ipa: "/blæk/"}, {text: "Pink", ipa: "/pɪŋk/"}, {text: "Cat", ipa: "/kæt/"}, 
+        {text: "Bed", ipa: "/bed/"}, {text: "Sit", ipa: "/sɪt/"}, {text: "Hot", ipa: "/hɒt/"}, 
+        {text: "Cup", ipa: "/kʌp/"}, {text: "Gray", ipa: "/ɡreɪ/"}, {text: "Three", ipa: "/θriː/"}, 
+        {text: "Eight", ipa: "/eɪt/"}, {text: "Twelve", ipa: "/twelv/"}, {text: "Thirteen", ipa: "/ˌθɜːrˈtiːn/"}, 
+        {text: "Thirty", ipa: "/ˈθɜːrti/"}, {text: "Fifty", ipa: "/ˈfɪfti/"}, {text: "Fifteen", ipa: "/ˌfɪfˈtiːn/"}, 
+        {text: "One hundred", ipa: "/wʌn ˈhʌndrəd/"}, {text: "One thousand", ipa: "/wʌn ˈθaʊzənd/"}, 
+        {text: "One million", ipa: "/wʌn ˈmɪljən/"}, {text: "Site", ipa: "/saɪt/"}, {text: "Hope", ipa: "/hoʊp/"}, 
+        {text: "Knee", ipa: "/niː/"}, {text: "Knife", ipa: "/naɪf/"}, {text: "Write", ipa: "/raɪt/"}, 
+        {text: "Bomb", ipa: "/bɒm/"}, {text: "Sign", ipa: "/saɪn/"}, {text: "Hour", ipa: "/aʊər/"}, 
+        {text: "Sheep", ipa: "/ʃiːp/"}, {text: "Purple", ipa: "/ˈpɜːr.pəl/"}, 
+        {text: "How do you spell that?", ipa: "Classroom Language"}, 
+        {text: "May I go to the bathroom?", ipa: "Polite Request"}, 
+        {text: "I don't understand", ipa: "Clarification"}, 
+        {text: "Could you speak slower, please?", ipa: "Request"}, 
+        {text: "Study-Group26@school.org", ipa: "Email Dictation"}, 
+        {text: "Out of the blue", ipa: "Idiom: Unexpected"}, 
+        {text: "Feeling blue", ipa: "Idiom: Sad"}, 
+        {text: "White lie", ipa: "Idiom: Harmless lie"}, 
+        {text: "The screen is blurry or frozen", ipa: "Tech Issue"}, 
+        {text: "One thousand, two hundred and thirty-four", ipa: "1,234"}
+    ];
+
+    let index = 0;
+    let correctCount = 0;
+    let totalSim = 0;
+    let currentRate = 0.9;
+
+    const synth = window.speechSynthesis;
+
+    function getFemaleEnglishVoice() {
+        const voices = synth.getVoices();
+        const targets = ["Google US English", "Samantha", "Microsoft Zira", "Microsoft Linda", "Catherine", "Female"];
+        for (let name of targets) {
+            const voice = voices.find(v => v.name.includes(name) && v.lang.includes("en"));
+            if (voice) return voice;
+        }
+        return voices.find(v => v.lang.startsWith("en"));
+    }
+
+    function setSpeed(rate, type) {
+        currentRate = rate;
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        if(type === 'Normal') document.getElementById('speedNormal').classList.add('active');
+        else document.getElementById('speedSlow').classList.add('active');
+    }
+
+    function speakText() {
+        if (synth.speaking) synth.cancel();
+        const utterance = new SpeechSynthesisUtterance(practiceData[index].text);
+        const voice = getFemaleEnglishVoice();
+        if (voice) utterance.voice = voice;
+        utterance.lang = "en-US";
+        utterance.rate = currentRate;
+        utterance.pitch = 1.0;
+        synth.speak(utterance);
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    function startMic() {
+        try { recognition.start(); } catch (e) {}
+    }
+
+    recognition.onstart = () => {
+        document.getElementById("recordBtn").classList.add("recording");
+        setFeedback("Listening...", "var(--primary)");
+    };
+
+    recognition.onresult = (event) => {
+        const spoken = event.results[0][0].transcript;
+        const target = practiceData[index].text;
+        const accuracy = compare(spoken, target);
+
+        document.getElementById("transcript").innerHTML = `You said: <b>"${spoken}"</b>`;
+        
+        if (accuracy > 0.75) {
+            correctCount++;
+            setFeedback(`Excellent! (${Math.round(accuracy*100)}%)`, "var(--success)");
+        } else if (accuracy > 0.4) {
+            setFeedback(`Keep practicing! (${Math.round(accuracy*100)}%)`, "var(--warning)");
+        } else {
+            setFeedback(`Try again! (${Math.round(accuracy*100)}%)`, "var(--error)");
+        }
+        
+        totalSim += accuracy;
+        document.getElementById("scoreText").innerText = `Correct: ${correctCount}`;
+    };
+
+    recognition.onend = () => {
+        document.getElementById("recordBtn").classList.remove("recording");
+    };
+
+    function compare(s1, s2) {
+        const n1 = s1.toLowerCase().replace(/[.,?!@_-]/g, "").trim();
+        const n2 = s2.toLowerCase().replace(/[.,?!@_-]/g, "").trim();
+        
+        if (n1 === n2) return 1;
+
+        const track = Array(n2.length + 1).fill(null).map(() => Array(n1.length + 1).fill(null));
+        for (let i = 0; i <= n1.length; i++) track[0][i] = i;
+        for (let j = 0; j <= n2.length; j++) track[j][0] = j;
+        for (let j = 1; j <= n2.length; j++) {
+            for (let i = 1; i <= n1.length; i++) {
+                const cost = n1[i-1] === n2[j-1] ? 0 : 1;
+                track[j][i] = Math.min(track[j][i-1]+1, track[j-1][i]+1, track[j-1][i-1]+cost);
+            }
+        }
+        const distance = track[n2.length][n1.length];
+        return Math.max(0, 1 - (distance / Math.max(n1.length, n2.length)));
+    }
+
+    function nextStep() {
+        if (index < practiceData.length - 1) {
+            index++;
+            updateUI();
+        } else {
+            showFinal();
+        }
+    }
+
+    function updateUI() {
+        const current = practiceData[index];
+        document.getElementById("phraseDisplay").innerText = current.text;
+        document.getElementById("phoneticDisplay").innerText = current.ipa;
+        document.getElementById("counterText").innerText = `Challenge ${index + 1} of ${practiceData.length}`;
+        document.getElementById("barFill").style.width = `${((index + 1) / practiceData.length) * 100}%`;
+        document.getElementById("feedback").innerText = "";
+        document.getElementById("transcript").innerText = "Click 'Speak' and talk.";
+    }
+
+    function showFinal() {
+        const avg = Math.round((totalSim / practiceData.length) * 100);
+        document.getElementById("mainCard").innerHTML = `
+            <h2 style="color:var(--primary)">Bootcamp Finished! 🎓</h2>
+            <p>Your Average Accuracy:</p>
+            <h1 style="color:var(--success); font-size: 3.5rem;">${avg}%</h1>
+            <p>Items successfully pronounced: ${correctCount} / ${practiceData.length}</p>
+            <button class="btn-record" style="width:100%" onclick="location.reload()">Start Over</button>
+        `;
+    }
+
+    function setFeedback(text, color) {
+        const f = document.getElementById("feedback");
+        f.innerText = text;
+        f.style.color = color;
+    }
+
+    window.onload = () => {
+        updateUI();
+        // Pré-carrega vozes
+        setTimeout(() => synth.getVoices(), 500);
+    };
+</script>
+
+</body>
+</html>
