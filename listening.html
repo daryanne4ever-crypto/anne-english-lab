@@ -10,22 +10,40 @@
   <main class="container">
     <section class="card">
       <h1>Listening Practice</h1>
-      <p class="muted">Ouça a frase, grave sua resposta e veja avaliação automática.</p>
-      <p><strong>Frase:</strong> <span id="targetPhrase">I am learning English every day.</span></p>
+      <p class="muted">Escute e grave com correção automática usando todas as frases solicitadas.</p>
 
-      <audio id="audioPlayer" controls>
-        <source src="" type="audio/mpeg" />
-        Seu navegador não suporta áudio embutido.
-      </audio>
-
-      <div class="spacer"></div>
-      <div class="actions">
-        <button id="playBtn" class="btn btn-primary">Reproduzir áudio</button>
-        <button id="recordBtn" class="btn btn-success">Gravar resposta</button>
-        <button id="backBtn" class="btn btn-secondary">Voltar ao Dashboard</button>
+      <div class="field">
+        <label for="category">Categoria</label>
+        <select id="category">
+          <option value="short">30 Frases Curtas</option>
+          <option value="medium">30 Frases Médias</option>
+          <option value="connectors">40 Frases com Conectores</option>
+          <option value="all" selected>Todas (100 frases)</option>
+        </select>
       </div>
+
+      <p><strong>Frase alvo:</strong> <span id="targetPhrase">-</span></p>
+      <p class="muted" id="phraseCounter">Frase 1</p>
+
+      <div class="actions">
+        <button id="playBtn" class="btn btn-primary">🔊 Reproduzir frase</button>
+        <button id="recordBtn" class="btn btn-success">🎤 Gravar resposta</button>
+        <button id="nextBtn" class="btn btn-secondary">Próxima frase</button>
+        <button id="randomBtn" class="btn btn-secondary">Aleatória</button>
+      </div>
+
       <p id="spoken" class="muted">Você falou: -</p>
       <p id="evaluation" class="feedback">Aguardando gravação.</p>
+
+      <h3>As 50 palavras mais usadas</h3>
+      <div id="wordButtons" class="actions"></div>
+
+      <h3>Banco de frases (escutar/gravar)</h3>
+      <ul id="phraseList" class="clean"></ul>
+
+      <div class="actions">
+        <button id="backBtn" class="btn btn-secondary">Voltar ao Dashboard</button>
+      </div>
     </section>
   </main>
   <script src="common.js"></script>

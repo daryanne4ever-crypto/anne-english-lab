@@ -2,26 +2,42 @@
 
 Projeto web educacional com navegação entre páginas para prática de inglês.
 
-## Estrutura obrigatória implementada
+## Estrutura implementada
 
-- `index.html` → Login (nome, senha, botão Entrar)
+- `index.html` → Login aluno + login exclusivo da professora
 - `dashboard.html` → Resumo do aluno (nome, nível, XP, streak, atividades)
-- `listening.html` → Listening com reprodução, gravação e avaliação automática
-- `quizzes.html` → Quiz de múltipla escolha com correção automática e XP
+- `listening.html` → Listening com reprodução, gravação, correção e frases completas
+- `quizzes.html` → Quiz de múltipla escolha com correção e XP
 - `flashcards.html` → Flashcards com ganho de XP
-- `performance.html` → Desempenho detalhado e histórico de atividades
+- `performance.html` → Desempenho detalhado (aluno) e painel de todos os alunos (professora)
 - `styles.css` → Estilos globais
-- `common.js` → Estado do aluno + sistema de XP via localStorage
+- `common.js` → Sessão, alunos, sistema de XP e controle de papéis
 - `index.js`, `dashboard.js`, `listening.js`, `quizzes.js`, `flashcards.js`, `performance.js` → Lógica por página
 
-## Requisitos atendidos
+## Login exclusivo da professora
 
-- HTML, CSS e JavaScript separados.
-- Layout moderno e simples.
-- Botões estilizados.
-- Arquivos organizados por responsabilidade.
-- Navegação funcional entre todas as páginas.
-- Sistema de XP com atualização no Dashboard.
+Credenciais fixas no código:
+
+- Usuário: `professora.anne`
+- Senha: `Anne@2024`
+
+Ao entrar como professora, a página `performance.html` mostra o desempenho de todos os alunos salvos no navegador.
+
+## Listening completo
+
+A página `listening.html` contém:
+
+- as 50 palavras mais usadas (clicáveis para ouvir);
+- 30 frases curtas;
+- 30 frases médias;
+- 40 frases com conectores;
+- treino de escuta e gravação com correção automática por similaridade.
+
+## Sistema de XP
+
+- Cada atividade concluída adiciona XP.
+- XP e progresso são salvos em `localStorage`.
+- Dashboard e Performance são atualizados com os novos valores.
 
 ## Como rodar
 
@@ -32,9 +48,3 @@ python3 -m http.server 8000
 Abra:
 
 - `http://127.0.0.1:8000/index.html`
-
-## Como funciona o XP
-
-- Ao concluir atividades (listening, quiz correto, revelar flashcard), o sistema soma XP.
-- XP e progresso são salvos em `localStorage`.
-- O Dashboard e a página de Performance refletem os valores atualizados.

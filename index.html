@@ -7,19 +7,39 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="container" style="max-width:560px; padding-top:10vh;">
+  <main class="container" style="max-width:760px; padding-top:8vh;">
     <section class="card">
       <h1>English Lab - Login</h1>
-      <p class="muted">Entre para acessar o dashboard do aluno.</p>
-      <div class="field">
-        <label for="name">Nome</label>
-        <input id="name" type="text" placeholder="Digite seu nome" />
+      <p class="muted">Aluno entra com nome/senha. Professora entra com login exclusivo.</p>
+
+      <div class="grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
+        <div>
+          <h3>Login Aluno</h3>
+          <div class="field">
+            <label for="name">Nome</label>
+            <input id="name" type="text" placeholder="Digite seu nome" />
+          </div>
+          <div class="field">
+            <label for="password">Senha</label>
+            <input id="password" type="password" placeholder="Digite sua senha" />
+          </div>
+          <button id="loginBtn" class="btn btn-primary" style="width:100%;">Entrar</button>
+        </div>
+
+        <div>
+          <h3>Login Professora</h3>
+          <div class="field">
+            <label for="teacherUser">Usuário</label>
+            <input id="teacherUser" type="text" placeholder="Usuário da professora" />
+          </div>
+          <div class="field">
+            <label for="teacherPass">Senha</label>
+            <input id="teacherPass" type="password" placeholder="Senha da professora" />
+          </div>
+          <button id="teacherLoginBtn" class="btn btn-success" style="width:100%;">Entrar como Professora</button>
+        </div>
       </div>
-      <div class="field">
-        <label for="password">Senha</label>
-        <input id="password" type="password" placeholder="Digite sua senha" />
-      </div>
-      <button id="loginBtn" class="btn btn-primary" style="width:100%;">Entrar</button>
+
       <p id="loginFeedback" class="feedback"></p>
     </section>
   </main>

@@ -8,6 +8,6 @@ if (student) {
 }
 
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  logoutStudent();
+  logoutSession();
   window.location.href = 'index.html';
 });

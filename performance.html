@@ -10,16 +10,26 @@
   <main class="container">
     <section class="card">
       <h1>Desempenho detalhado</h1>
-      <p class="muted">Resumo de XP e atividades concluídas.</p>
-      <p><strong>Aluno:</strong> <span id="studentName">-</span></p>
-      <p><strong>Total XP:</strong> <span id="studentXP">0</span></p>
-      <p><strong>Nível:</strong> <span id="studentLevel">1</span></p>
-      <p><strong>Atividades:</strong> <span id="studentActivities">0</span></p>
-      <div class="progress"><div id="levelProgress"></div></div>
-      <h3>Últimas atividades</h3>
-      <ul id="activityLog" class="clean"></ul>
+      <p class="muted" id="roleHint">Resumo de XP e atividades.</p>
+
+      <div id="studentSummary">
+        <p><strong>Aluno:</strong> <span id="studentName">-</span></p>
+        <p><strong>Total XP:</strong> <span id="studentXP">0</span></p>
+        <p><strong>Nível:</strong> <span id="studentLevel">1</span></p>
+        <p><strong>Atividades:</strong> <span id="studentActivities">0</span></p>
+        <div class="progress"><div id="levelProgress"></div></div>
+        <h3>Últimas atividades</h3>
+        <ul id="activityLog" class="clean"></ul>
+      </div>
+
+      <div id="teacherSummary" style="display:none;">
+        <h3>Painel da Professora (todos os alunos)</h3>
+        <ul id="studentsList" class="clean"></ul>
+      </div>
+
       <div class="actions">
-        <button id="backBtn" class="btn btn-secondary">Voltar ao Dashboard</button>
+        <button id="backBtn" class="btn btn-secondary">Voltar</button>
+        <button id="logoutBtn" class="btn btn-danger">Sair</button>
       </div>
     </section>
   </main>
