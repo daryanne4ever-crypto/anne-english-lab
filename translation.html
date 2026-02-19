@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Translation Quiz | English Lab</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Quiz de Tradução de Frases</h1>
+      <p class="muted">Traduza para português (curtas até complexas).</p>
+      <p><strong>Frase em inglês:</strong> <span id="sourceSentence">-</span></p>
+      <div class="field">
+        <label for="answerInput">Sua tradução</label>
+        <input id="answerInput" type="text" placeholder="Digite sua tradução" />
+      </div>
+      <p id="translationFeedback" class="feedback"></p>
+      <div class="actions">
+        <button id="checkBtn" class="btn btn-primary">Corrigir</button>
+        <button id="nextBtn" class="btn btn-secondary">Próxima frase</button>
+        <button id="backBtn" class="btn btn-secondary">Voltar ao Dashboard</button>
+      </div>
+    </section>
+  </main>
+  <script src="common.js"></script>
+  <script src="translation.js"></script>
+</body>
+</html>

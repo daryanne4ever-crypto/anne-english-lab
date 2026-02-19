@@ -84,3 +84,35 @@ label { font-weight: 600; font-size: 0.95rem; }
 a.link { color: var(--primary-dark); text-decoration: none; font-weight: 600; }
 ul.clean { list-style: none; padding: 0; margin: 0; }
 ul.clean li { padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+
+.flash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+.flash-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px;
+  background: #fff;
+  cursor: pointer;
+}
+.flash-card:hover { background: #f8fafc; }
+.flash-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.sound-btn {
+  border: none;
+  background: #dbeafe;
+  border-radius: 8px;
+  padding: 4px 7px;
+  cursor: pointer;
+}
+.hidden-info {
+  display: none;
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+}

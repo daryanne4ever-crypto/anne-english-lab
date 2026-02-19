@@ -1,50 +1,37 @@
 # Anne English Lab
 
-Projeto web educacional com navegação entre páginas para prática de inglês.
+Sistema educacional web com login de aluno/professora, dashboard, quizzes, listening, flashcards e desempenho.
 
-## Estrutura implementada
+## Navegação
 
-- `index.html` → Login aluno + login exclusivo da professora
-- `dashboard.html` → Resumo do aluno (nome, nível, XP, streak, atividades)
-- `listening.html` → Listening com reprodução, gravação, correção e frases completas
-- `quizzes.html` → Quiz de múltipla escolha com correção e XP
-- `flashcards.html` → Flashcards com ganho de XP
-- `performance.html` → Desempenho detalhado (aluno) e painel de todos os alunos (professora)
-- `styles.css` → Estilos globais
-- `common.js` → Sessão, alunos, sistema de XP e controle de papéis
-- `index.js`, `dashboard.js`, `listening.js`, `quizzes.js`, `flashcards.js`, `performance.js` → Lógica por página
+- `index.html` → Login (aluno + professora)
+- `dashboard.html` → Resumo do aluno
+- `quizzes.html` → Quiz principal com 50 questões e 5 níveis
+- `translation.html` → Quiz de tradução de frases
+- `flashcards.html` → 50 flashcards com tradução, IPA e áudio
+- `listening.html` → Escutar e gravar com correção automática
+- `performance.html` → Desempenho (aluno) / painel geral (professora)
 
-## Login exclusivo da professora
+## Professora (acesso exclusivo)
 
-Credenciais fixas no código:
+Credenciais fixas:
 
 - Usuário: `professora.anne`
 - Senha: `Anne@2024`
 
-Ao entrar como professora, a página `performance.html` mostra o desempenho de todos os alunos salvos no navegador.
+## Requisitos implementados
 
-## Listening completo
+- Quiz principal com 50 questões em 5 níveis progressivos.
+- Subida de nível no quiz principal a cada 10 acertos.
+- XP mantido e atualizado em dashboard/performance.
+- Translation quiz com campo digitável e correção automática.
+- Flashcards com 50 palavras (EN, PT, IPA, botão de áudio).
+- Persistência em `localStorage` para XP, nível e atividades.
 
-A página `listening.html` contém:
-
-- as 50 palavras mais usadas (clicáveis para ouvir);
-- 30 frases curtas;
-- 30 frases médias;
-- 40 frases com conectores;
-- treino de escuta e gravação com correção automática por similaridade.
-
-## Sistema de XP
-
-- Cada atividade concluída adiciona XP.
-- XP e progresso são salvos em `localStorage`.
-- Dashboard e Performance são atualizados com os novos valores.
-
-## Como rodar
+## Executar localmente
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Abra:
-
-- `http://127.0.0.1:8000/index.html`
+Abra `http://127.0.0.1:8000/index.html`.

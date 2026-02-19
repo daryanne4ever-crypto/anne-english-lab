@@ -12,7 +12,8 @@ const defaultStudent = {
   xp: 0,
   streak: 1,
   completedActivities: 0,
-  activityLog: []
+  activityLog: [],
+  quizCorrectCount: 0
 };
 
 function getStudentsMap() {
@@ -79,7 +80,8 @@ function addXP(amount, activityName) {
   const student = getStudent();
   if (!student.name) return { ...defaultStudent };
   student.xp += amount;
-  student.level = Math.floor(student.xp / 100) + 1;
+  const levelByXP = Math.floor(student.xp / 100) + 1;
+  student.level = Math.max(student.level || 1, levelByXP);
   student.completedActivities += 1;
   student.activityLog.unshift({
     activity: activityName,

@@ -8,14 +8,11 @@
 </head>
 <body>
   <main class="container">
-    <section class="card center">
-      <h1>Flashcards</h1>
-      <p class="muted">Clique para revelar tradução e ganhar XP.</p>
-      <h2 id="word">Happy</h2>
-      <p id="meaning" class="muted">(oculto)</p>
-      <div class="actions" style="justify-content:center;">
-        <button id="revealBtn" class="btn btn-primary">Revelar</button>
-        <button id="nextBtn" class="btn btn-secondary">Próximo</button>
+    <section class="card">
+      <h1>Flashcards (50 palavras)</h1>
+      <p class="muted">Clique no card para mostrar tradução + IPA. Clique em 🔊 para ouvir pronúncia.</p>
+      <div id="flashGrid" class="flash-grid"></div>
+      <div class="actions" style="margin-top:16px;">
         <button id="backBtn" class="btn btn-secondary">Voltar ao Dashboard</button>
       </div>
     </section>
