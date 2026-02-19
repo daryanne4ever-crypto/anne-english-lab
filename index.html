@@ -1,130 +1,335 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratório de Inglês - Anne</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Unit 0: Pronunciation Bootcamp</title>
     <style>
+        :root {
+            --primary: #2563eb;
+            --success: #16a34a;
+            --error: #dc2626;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
+        }
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
         }
-        .hero-gradient {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        .quiz-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            width: 95%;
+            max-width: 550px;
+            text-align: center;
         }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            transition: all 0.3s ease;
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: .85rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .bar-bg {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        #barFill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: 0.4s ease;
+        }
+        #sentence {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.4;
+        }
+        .phonetic {
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: normal;
+            margin-top: 8px;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .speed-control {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #64748b;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+        .btn-listen { background: #eff6ff; color: var(--primary); flex: 1; }
+        .btn-record { background: var(--primary); color: white; flex: 2; }
+        .btn-next { background: #e2e8f0; color: #475569; }
+        
+        .recording {
+            background: var(--error) !important;
+            animation: pulse 1.2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        #feedback { margin-top: 15px; font-weight: 700; min-height: 24px; }
+        .transcript-box {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #475569;
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 12px;
+        }
+        .speed-btn {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .speed-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
     </style>
 </head>
-<body class="text-slate-800">
+<body>
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-700">English Lab <span class="text-slate-400 font-light">| Anne</span></div>
-            <div class="space-x-6 hidden md:flex">
-                <a href="#" class="hover:text-blue-600 font-medium">Início</a>
-                <a href="#vocab" class="hover:text-blue-600 font-medium">Vocabulário</a>
-                <a href="#resources" class="hover:text-blue-600 font-medium">Recursos</a>
-            </div>
+<div class="quiz-card" id="mainCard">
+    <div class="progress-info">
+        <span id="counterText">Loading...</span>
+        <span id="scoreText">Correct: 0</span>
+    </div>
+
+    <div class="bar-bg"><div id="barFill"></div></div>
+
+    <div id="sentence">
+        <div id="phraseDisplay">Loading challenge...</div>
+        <div id="phoneticDisplay" class="phonetic"></div>
+    </div>
+
+    <div class="controls">
+        <div class="speed-control">
+            <span>Voice Speed:</span>
+            <div id="speedNormal" class="speed-btn active" onclick="setSpeed(0.9, 'Normal')">Normal</div>
+            <div id="speedSlow" class="speed-btn" onclick="setSpeed(0.5, 'Slow')">Slow 🐢</div>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <header class="hero-gradient text-white py-20 px-4">
-        <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 italic">Welcome to my English Lab!</h1>
-            <p class="text-xl opacity-90 mb-8">Este é o meu espaço pessoal para registrar progressos, praticar escrita e organizar meus estudos de inglês.</p>
-            <div class="flex justify-center gap-4">
-                <a href="#vocab" class="bg-white text-blue-700 px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-50 transition">Explorar Vocabulário</a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-4 py-16">
         
-        <!-- Quick Stats/Goal -->
-        <section class="grid md:grid-cols-3 gap-8 mb-16">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
-                <div class="text-blue-600 text-3xl mb-2">📚</div>
-                <h3 class="font-bold text-lg">Meta Semanal</h3>
-                <p class="text-slate-500">Aprender 10 novos verbos e praticar conversação.</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
-                <div class="text-blue-600 text-3xl mb-2">🎧</div>
-                <h3 class="font-bold text-lg">Listening</h3>
-                <p class="text-slate-500">Ouvir podcasts diários por 20 minutos.</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
-                <div class="text-blue-600 text-3xl mb-2">✍️</div>
-                <h3 class="font-bold text-lg">Writing</h3>
-                <p class="text-slate-500">Escrever um parágrafo sobre o meu dia.</p>
-            </div>
-        </section>
-
-        <!-- Vocabulary Section -->
-        <section id="vocab" class="mb-16">
-            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
-                <span class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center text-sm">01</span>
-                Word of the Day (Palavra do Dia)
-            </h2>
-            <div class="bg-white border-l-8 border-blue-600 p-8 rounded-r-2xl shadow-md">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Adjective</span>
-                        <h3 class="text-4xl font-black text-slate-900 mt-1">Resilient</h3>
-                        <p class="text-lg text-slate-600 mt-2 italic">"Able to withstand or recover quickly from difficult conditions."</p>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-xl">
-                        <p class="font-bold">Tradução:</p>
-                        <p class="text-blue-700">Resiliente</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Useful Links -->
-        <section id="resources">
-            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
-                <span class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center text-sm">02</span>
-                Recursos Favoritos
-            </h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <a href="https://translate.google.com" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 card-hover flex items-center gap-3 shadow-sm">
-                    <span class="text-2xl">🌐</span>
-                    <span class="font-medium">Google Translate</span>
-                </a>
-                <a href="https://www.cambridgelexicon.com" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 card-hover flex items-center gap-3 shadow-sm">
-                    <span class="text-2xl">📖</span>
-                    <span class="font-medium">Cambridge Dictionary</span>
-                </a>
-                <a href="https://www.duolingo.com" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 card-hover flex items-center gap-3 shadow-sm">
-                    <span class="text-2xl">🦉</span>
-                    <span class="font-medium">Duolingo</span>
-                </a>
-                <a href="https://youglish.com" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 card-hover flex items-center gap-3 shadow-sm">
-                    <span class="text-2xl">🎥</span>
-                    <span class="font-medium">YouGlish</span>
-                </a>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-12 px-4 mt-20">
-        <div class="max-w-6xl mx-auto text-center">
-            <p class="mb-4">"Language is the road map of a culture. It tells you where its people come from and where they are going."</p>
-            <div class="border-t border-slate-800 pt-8 mt-8 text-sm">
-                &copy; 2024 Laboratório de Inglês da Anne. Criado com dedicação.
-            </div>
+        <div class="btn-group">
+            <button class="btn-listen" onclick="speakText()">🔊 Listen</button>
+            <button id="recordBtn" class="btn-record" onclick="startMic()">🎤 Speak</button>
+            <button class="btn-next" onclick="nextStep()">Next ➡</button>
         </div>
-    </footer>
+    </div>
+
+    <div id="feedback"></div>
+    <div id="transcript" class="transcript-box">Click 'Speak' to start.</div>
+</div>
+
+<script>
+    // LISTA COMPLETA UNIT 0 - 50 ITENS
+    const practiceData = [
+        {text: "A", ipa: "/eɪ/"}, {text: "E", ipa: "/iː/"}, {text: "I", ipa: "/aɪ/"}, 
+        {text: "G", ipa: "/dʒiː/"}, {text: "J", ipa: "/dʒeɪ/"}, {text: "H", ipa: "/eɪtʃ/"}, 
+        {text: "R", ipa: "/ɑːr/"}, {text: "W", ipa: "/ˈdʌbəl.juː/"}, {text: "Hello", ipa: "/həˈloʊ/"}, 
+        {text: "Good morning", ipa: "/ɡʊd ˈmɔːrnɪŋ/"}, {text: "Red", ipa: "/red/"}, {text: "Blue", ipa: "/bluː/"}, 
+        {text: "Black", ipa: "/blæk/"}, {text: "Pink", ipa: "/pɪŋk/"}, {text: "Cat", ipa: "/kæt/"}, 
+        {text: "Bed", ipa: "/bed/"}, {text: "Sit", ipa: "/sɪt/"}, {text: "Hot", ipa: "/hɒt/"}, 
+        {text: "Cup", ipa: "/kʌp/"}, {text: "Gray", ipa: "/ɡreɪ/"}, {text: "Three", ipa: "/θriː/"}, 
+        {text: "Eight", ipa: "/eɪt/"}, {text: "Twelve", ipa: "/twelv/"}, {text: "Thirteen", ipa: "/ˌθɜːrˈtiːn/"}, 
+        {text: "Thirty", ipa: "/ˈθɜːrti/"}, {text: "Fifty", ipa: "/ˈfɪfti/"}, {text: "Fifteen", ipa: "/ˌfɪfˈtiːn/"}, 
+        {text: "One hundred", ipa: "/wʌn ˈhʌndrəd/"}, {text: "One thousand", ipa: "/wʌn ˈθaʊzənd/"}, 
+        {text: "One million", ipa: "/wʌn ˈmɪljən/"}, {text: "Site", ipa: "/saɪt/"}, {text: "Hope", ipa: "/hoʊp/"}, 
+        {text: "Knee", ipa: "/niː/"}, {text: "Knife", ipa: "/naɪf/"}, {text: "Write", ipa: "/raɪt/"}, 
+        {text: "Bomb", ipa: "/bɒm/"}, {text: "Sign", ipa: "/saɪn/"}, {text: "Hour", ipa: "/aʊər/"}, 
+        {text: "Sheep", ipa: "/ʃiːp/"}, {text: "Purple", ipa: "/ˈpɜːr.pəl/"}, 
+        {text: "How do you spell that?", ipa: "Classroom Language"}, 
+        {text: "May I go to the bathroom?", ipa: "Polite Request"}, 
+        {text: "I don't understand", ipa: "Clarification"}, 
+        {text: "Could you speak slower, please?", ipa: "Request"}, 
+        {text: "Study-Group26@school.org", ipa: "Email Dictation"}, 
+        {text: "Out of the blue", ipa: "Idiom: Unexpected"}, 
+        {text: "Feeling blue", ipa: "Idiom: Sad"}, 
+        {text: "White lie", ipa: "Idiom: Harmless lie"}, 
+        {text: "The screen is blurry or frozen", ipa: "Tech Issue"}, 
+        {text: "One thousand, two hundred and thirty-four", ipa: "1,234"}
+    ];
+
+    let index = 0;
+    let correctCount = 0;
+    let totalSim = 0;
+    let currentRate = 0.9;
+
+    const synth = window.speechSynthesis;
+
+    function getFemaleEnglishVoice() {
+        const voices = synth.getVoices();
+        const targets = ["Google US English", "Samantha", "Microsoft Zira", "Microsoft Linda", "Catherine", "Female"];
+        for (let name of targets) {
+            const voice = voices.find(v => v.name.includes(name) && v.lang.includes("en"));
+            if (voice) return voice;
+        }
+        return voices.find(v => v.lang.startsWith("en"));
+    }
+
+    function setSpeed(rate, type) {
+        currentRate = rate;
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        if(type === 'Normal') document.getElementById('speedNormal').classList.add('active');
+        else document.getElementById('speedSlow').classList.add('active');
+    }
+
+    function speakText() {
+        if (synth.speaking) synth.cancel();
+        const utterance = new SpeechSynthesisUtterance(practiceData[index].text);
+        const voice = getFemaleEnglishVoice();
+        if (voice) utterance.voice = voice;
+        utterance.lang = "en-US";
+        utterance.rate = currentRate;
+        utterance.pitch = 1.0;
+        synth.speak(utterance);
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    function startMic() {
+        try { recognition.start(); } catch (e) {}
+    }
+
+    recognition.onstart = () => {
+        document.getElementById("recordBtn").classList.add("recording");
+        setFeedback("Listening...", "var(--primary)");
+    };
+
+    recognition.onresult = (event) => {
+        const spoken = event.results[0][0].transcript;
+        const target = practiceData[index].text;
+        const accuracy = compare(spoken, target);
+
+        document.getElementById("transcript").innerHTML = `You said: <b>"${spoken}"</b>`;
+        
+        if (accuracy > 0.75) {
+            correctCount++;
+            setFeedback(`Excellent! (${Math.round(accuracy*100)}%)`, "var(--success)");
+        } else if (accuracy > 0.4) {
+            setFeedback(`Keep practicing! (${Math.round(accuracy*100)}%)`, "var(--warning)");
+        } else {
+            setFeedback(`Try again! (${Math.round(accuracy*100)}%)`, "var(--error)");
+        }
+        
+        totalSim += accuracy;
+        document.getElementById("scoreText").innerText = `Correct: ${correctCount}`;
+    };
+
+    recognition.onend = () => {
+        document.getElementById("recordBtn").classList.remove("recording");
+    };
+
+    function compare(s1, s2) {
+        const n1 = s1.toLowerCase().replace(/[.,?!@_-]/g, "").trim();
+        const n2 = s2.toLowerCase().replace(/[.,?!@_-]/g, "").trim();
+        
+        if (n1 === n2) return 1;
+
+        const track = Array(n2.length + 1).fill(null).map(() => Array(n1.length + 1).fill(null));
+        for (let i = 0; i <= n1.length; i++) track[0][i] = i;
+        for (let j = 0; j <= n2.length; j++) track[j][0] = j;
+        for (let j = 1; j <= n2.length; j++) {
+            for (let i = 1; i <= n1.length; i++) {
+                const cost = n1[i-1] === n2[j-1] ? 0 : 1;
+                track[j][i] = Math.min(track[j][i-1]+1, track[j-1][i]+1, track[j-1][i-1]+cost);
+            }
+        }
+        const distance = track[n2.length][n1.length];
+        return Math.max(0, 1 - (distance / Math.max(n1.length, n2.length)));
+    }
+
+    function nextStep() {
+        if (index < practiceData.length - 1) {
+            index++;
+            updateUI();
+        } else {
+            showFinal();
+        }
+    }
+
+    function updateUI() {
+        const current = practiceData[index];
+        document.getElementById("phraseDisplay").innerText = current.text;
+        document.getElementById("phoneticDisplay").innerText = current.ipa;
+        document.getElementById("counterText").innerText = `Challenge ${index + 1} of ${practiceData.length}`;
+        document.getElementById("barFill").style.width = `${((index + 1) / practiceData.length) * 100}%`;
+        document.getElementById("feedback").innerText = "";
+        document.getElementById("transcript").innerText = "Click 'Speak' and talk.";
+    }
+
+    function showFinal() {
+        const avg = Math.round((totalSim / practiceData.length) * 100);
+        document.getElementById("mainCard").innerHTML = `
+            <h2 style="color:var(--primary)">Bootcamp Finished! 🎓</h2>
+            <p>Your Average Accuracy:</p>
+            <h1 style="color:var(--success); font-size: 3.5rem;">${avg}%</h1>
+            <p>Items successfully pronounced: ${correctCount} / ${practiceData.length}</p>
+            <button class="btn-record" style="width:100%" onclick="location.reload()">Start Over</button>
+        `;
+    }
+
+    function setFeedback(text, color) {
+        const f = document.getElementById("feedback");
+        f.innerText = text;
+        f.style.color = color;
+    }
+
+    window.onload = () => {
+        updateUI();
+        // Pré-carrega vozes
+        setTimeout(() => synth.getVoices(), 500);
+    };
+</script>
 
 </body>
 </html>
