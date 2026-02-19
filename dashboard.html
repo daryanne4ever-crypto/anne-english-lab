@@ -10,20 +10,35 @@
   <main class="container">
     <section class="card">
       <h1>Dashboard do Aluno</h1>
-      <p class="muted">Acompanhe seu progresso geral.</p>
+      <p class="muted">Acompanhe seu progresso geral e por unidade.</p>
       <div class="grid stats">
         <div class="stat"><div class="label">Nome</div><div id="name" class="value">-</div></div>
-        <div class="stat"><div class="label">Nível</div><div id="level" class="value">1</div></div>
-        <div class="stat"><div class="label">XP acumulado</div><div id="xp" class="value">0</div></div>
+        <div class="stat"><div class="label">Nível Geral</div><div id="level" class="value">1</div></div>
+        <div class="stat"><div class="label">XP Geral</div><div id="xp" class="value">0</div></div>
         <div class="stat"><div class="label">Dias de sequência</div><div id="streak" class="value">1</div></div>
         <div class="stat"><div class="label">Atividades concluídas</div><div id="activities" class="value">0</div></div>
       </div>
+
+      <div class="spacer"></div>
+      <div class="grid stats">
+        <div class="stat"><div class="label">Unit 1 XP</div><div id="unit1xp" class="value">0</div></div>
+        <div class="stat"><div class="label">Unit 1 Nível</div><div id="unit1level" class="value">1</div></div>
+        <div class="stat"><div class="label">Unit 2 XP</div><div id="unit2xp" class="value">0</div></div>
+        <div class="stat"><div class="label">Unit 2 Nível</div><div id="unit2level" class="value">1</div></div>
+      </div>
+
       <div class="spacer"></div>
       <div class="actions">
-        <a class="btn btn-primary" href="listening.html">Ir para Listening Practice</a>
-        <a class="btn btn-primary" href="quizzes.html">Ir para Quizzes</a>
-        <a class="btn btn-primary" href="flashcards.html">Ir para Flashcards</a>
-        <a class="btn btn-primary" href="translation.html">Ir para Translation Quiz</a>
+        <a class="btn btn-primary" href="unit1/quiz.html">Acessar Unit 1 – Telling About Yourself</a>
+        <a class="btn btn-primary" href="unit2/quiz.html">Acessar Unit 2 – Traveling Abroad</a>
+      </div>
+
+      <div class="spacer"></div>
+      <div class="actions">
+        <a class="btn btn-secondary" href="quizzes.html">Quiz principal</a>
+        <a class="btn btn-secondary" href="translation.html">Translation Quiz</a>
+        <a class="btn btn-secondary" href="flashcards.html">Flashcards (geral)</a>
+        <a class="btn btn-secondary" href="listening.html">Listening (geral)</a>
         <a class="btn btn-secondary" href="performance.html">Ver desempenho detalhado</a>
         <button id="logoutBtn" class="btn btn-danger">Voltar ao login</button>
       </div>

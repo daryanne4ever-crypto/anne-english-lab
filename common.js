@@ -6,6 +6,13 @@ const TEACHER_CREDENTIALS = {
   password: 'Anne@2024'
 };
 
+const defaultUnitProgress = {
+  xp: 0,
+  level: 1,
+  completedActivities: 0,
+  activityLog: []
+};
+
 const defaultStudent = {
   name: '',
   level: 1,
@@ -13,8 +20,19 @@ const defaultStudent = {
   streak: 1,
   completedActivities: 0,
   activityLog: [],
-  quizCorrectCount: 0
+  quizCorrectCount: 0,
+  unitProgress: {
+    unit1: { ...defaultUnitProgress },
+    unit2: { ...defaultUnitProgress }
+  }
 };
+
+function ensureUnitProgressShape(progress) {
+  return {
+    unit1: { ...defaultUnitProgress, ...(progress?.unit1 || {}) },
+    unit2: { ...defaultUnitProgress, ...(progress?.unit2 || {}) }
+  };
+}
 
 function getStudentsMap() {
   try {
@@ -42,6 +60,7 @@ function setStudent(name, password) {
   students[key] = {
     ...defaultStudent,
     ...existing,
+    unitProgress: ensureUnitProgressShape(existing.unitProgress),
     name: name.trim(),
     password
   };
@@ -65,14 +84,20 @@ function getStudent() {
   const session = getSession();
   if (!session || session.role !== 'student' || !session.studentKey) return { ...defaultStudent };
   const students = getStudentsMap();
-  return { ...defaultStudent, ...(students[session.studentKey] || {}) };
+  const student = { ...defaultStudent, ...(students[session.studentKey] || {}) };
+  student.unitProgress = ensureUnitProgressShape(student.unitProgress);
+  return student;
 }
 
 function saveCurrentStudent(student) {
   const session = getSession();
   if (!session || session.role !== 'student') return;
   const students = getStudentsMap();
-  students[session.studentKey] = { ...defaultStudent, ...student };
+  students[session.studentKey] = {
+    ...defaultStudent,
+    ...student,
+    unitProgress: ensureUnitProgressShape(student.unitProgress)
+  };
   saveStudentsMap(students);
 }
 
@@ -90,6 +115,26 @@ function addXP(amount, activityName) {
   });
   saveCurrentStudent(student);
   return student;
+}
+
+function addUnitXP(unit, amount, activityName) {
+  const student = getStudent();
+  if (!student.name) return { ...defaultUnitProgress };
+  student.unitProgress = ensureUnitProgressShape(student.unitProgress);
+  const target = student.unitProgress[unit] || { ...defaultUnitProgress };
+  target.xp += amount;
+  target.level = Math.floor(target.xp / 100) + 1;
+  target.completedActivities += 1;
+  target.activityLog.unshift({ activity: activityName, xp: amount, at: new Date().toISOString() });
+  student.unitProgress[unit] = target;
+  saveCurrentStudent(student);
+  return target;
+}
+
+function getUnitProgress(unit) {
+  const student = getStudent();
+  student.unitProgress = ensureUnitProgressShape(student.unitProgress);
+  return student.unitProgress[unit] || { ...defaultUnitProgress };
 }
 
 function loginTeacher(username, password) {

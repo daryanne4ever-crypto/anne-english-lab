@@ -2,15 +2,42 @@
 
 Sistema educacional web com login de aluno/professora, dashboard, quizzes, listening, flashcards e desempenho.
 
-## Navegação
+## Estrutura por unidade (sem mistura de conteúdo)
+
+- `/unit1`
+  - `quiz.html` / `quiz.js`
+  - `flashcards.html` / `flashcards.js`
+  - `listening.html` / `listening.js`
+- `/unit2`
+  - `quiz.html` / `quiz.js`
+  - `flashcards.html` / `flashcards.js`
+  - `listening.html` / `listening.js`
+
+Cada unidade possui conteúdo e pontuação independentes.
+
+## Navegação principal
 
 - `index.html` → Login (aluno + professora)
-- `dashboard.html` → Resumo do aluno
-- `quizzes.html` → Quiz principal com 50 questões e 5 níveis
-- `translation.html` → Quiz de tradução de frases
-- `flashcards.html` → 50 flashcards com tradução, IPA e áudio
-- `listening.html` → Escutar e gravar com correção automática
-- `performance.html` → Desempenho (aluno) / painel geral (professora)
+- `dashboard.html` → Resumo geral + botões separados de Unit 1 e Unit 2
+- `quizzes.html` → Quiz principal (50 questões)
+- `translation.html` → Quiz de tradução
+- `flashcards.html` / `listening.html` → módulos gerais já existentes
+- `performance.html` → desempenho aluno/professora
+
+## XP e progresso
+
+Persistidos no `localStorage`:
+
+- XP geral / nível geral
+- atividades gerais
+- XP da `unit1`
+- XP da `unit2`
+
+Funções-chave no `common.js`:
+
+- `addXP(...)` para fluxo geral
+- `addUnitXP('unit1'|'unit2', ...)` para progresso por unidade
+- `getUnitProgress('unit1'|'unit2')`
 
 ## Professora (acesso exclusivo)
 
@@ -18,15 +45,6 @@ Credenciais fixas:
 
 - Usuário: `professora.anne`
 - Senha: `Anne@2024`
-
-## Requisitos implementados
-
-- Quiz principal com 50 questões em 5 níveis progressivos.
-- Subida de nível no quiz principal a cada 10 acertos.
-- XP mantido e atualizado em dashboard/performance.
-- Translation quiz com campo digitável e correção automática.
-- Flashcards com 50 palavras (EN, PT, IPA, botão de áudio).
-- Persistência em `localStorage` para XP, nível e atividades.
 
 ## Executar localmente
 
