@@ -18,10 +18,8 @@ Cada unidade possui conteúdo e pontuação independentes.
 ## Navegação principal
 
 - `index.html` → Login (aluno + professora)
-- `dashboard.html` → Resumo geral + botões separados de Unit 1 e Unit 2
-- `quizzes.html` → Quiz principal (50 questões)
-- `translation.html` → Quiz de tradução
-- `flashcards.html` / `listening.html` → módulos gerais já existentes
+- `dashboard.html` → Resumo geral + acesso para Unit 1
+- `unit1/menu.html` → Menu da Unit 1 com Quiz, Translation, Flashcards e Listening
 - `performance.html` → desempenho aluno/professora
 
 ## XP e progresso
@@ -53,3 +51,8 @@ python3 -m http.server 8000
 ```
 
 Abra `http://127.0.0.1:8000/index.html`.
+
+
+## Interface principal
+
+Os módulos de estudo (quiz, translation, flashcards e listening) foram retirados da interface principal e centralizados no menu da Unit 1 (`unit1/menu.html`).
