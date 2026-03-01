@@ -1,130 +1,407 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratório de Inglês - Anne</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            transition: all 0.3s ease;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anne English Lab</title>
+  <style>
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --purple: #4b0082;
+      --violet: #8a2be2;
+      --green: #2ecc71;
+      --red: #ff3333;
+      --panel: #111111;
+      --muted: #c7c7c7;
+      --fast: 0.12s;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 2px solid var(--purple);
+      position: sticky;
+      top: 0;
+      background: var(--panel);
+      z-index: 2;
+    }
+
+    .tab-btn {
+      border: 0;
+      background: transparent;
+      color: var(--white);
+      padding: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--fast) ease;
+    }
+
+    .tab-btn.active,
+    .tab-btn:hover { background: var(--purple); }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 2px solid var(--purple);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .title { margin-top: 0; }
+
+    .row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    input {
+      background: #1f1f1f;
+      color: var(--white);
+      border: 1px solid var(--violet);
+      border-radius: 8px;
+      padding: 11px 12px;
+      min-width: 210px;
+    }
+
+    button {
+      background: var(--purple);
+      border: 0;
+      color: var(--white);
+      font-weight: 700;
+      padding: 11px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background var(--fast) ease;
+    }
+
+    button:hover { background: var(--violet); }
+
+    .secondary { background: #303030; }
+
+    .secondary:hover { background: #444; }
+
+    .unit-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .feedback {
+      margin-top: 12px;
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid var(--violet);
+      line-height: 1.4;
+      white-space: pre-line;
+    }
+
+    .hidden { display: none; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #2b2b2b;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th { color: var(--violet); }
+
+    .muted { color: var(--muted); }
+
+    .status-good { color: var(--green); font-weight: 700; }
+    .status-bad { color: var(--red); font-weight: 700; }
+  </style>
 </head>
-<body class="text-slate-800">
+<body>
+  <div class="tabs">
+    <button id="tab-aluno" class="tab-btn active" onclick="switchTab('aluno')">DASHBOARD DO ALUNO</button>
+    <button id="tab-professor" class="tab-btn" onclick="switchTab('professor')">PAINEL DO PROFESSOR</button>
+  </div>
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-700">English Lab <span class="text-slate-400 font-light">| Anne</span></div>
-            <div class="space-x-6 hidden md:flex">
-                <a href="#" class="hover:text-blue-600 font-medium">Início</a>
-                <a href="#vocab" class="hover:text-blue-600 font-medium">Vocabulário</a>
-                <a href="#resources" class="hover:text-blue-600 font-medium">Recursos</a>
-            </div>
-        </div>
-    </nav>
+  <section id="view-aluno" class="container">
+    <div class="card">
+      <h2 class="title">Cadastro/Login do aluno (persistente)</h2>
+      <p class="muted">Somente um painel de login. Os dados ficam salvos até você excluir manualmente no painel do professor.</p>
+      <div class="row">
+        <input id="login-input" placeholder="Login do aluno (ex.: belly01)" />
+        <input id="name-input" placeholder="Nome do aluno" />
+        <button onclick="saveOrLoginStudent()">ENTRAR / SALVAR</button>
+      </div>
+    </div>
 
-    <!-- Hero Section -->
-    <header class="hero-gradient text-white py-20 px-4">
-        <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 italic">Welcome to my English Lab!</h1>
-            <p class="text-xl opacity-90 mb-8">Este é o meu espaço pessoal para registrar progressos, praticar escrita e organizar meus estudos de inglês.</p>
-            <div class="flex justify-center gap-4">
-                <a href="#vocab" class="bg-white text-blue-700 px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-50 transition">Explorar Vocabulário</a>
-            </div>
-        </div>
-    </header>
+    <div class="card" id="student-overview">
+      <h3 class="title">Aluno atual: <span id="current-name">-</span></h3>
+      <p>Login: <strong id="current-login">-</strong></p>
+      <p>XP atual: <strong id="current-xp">0</strong> | Acertos: <strong id="current-score">0%</strong></p>
+      <div class="row">
+        <button style="background: var(--violet);" onclick="continueFromLastPoint()">CONTINUAR DE ONDE PAREI</button>
+      </div>
+    </div>
 
-    <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-4 py-16">
-        
-        <!-- Quick Stats/Goal -->
-        <section class="grid md:grid-cols-3 gap-8 mb-16">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
-                <div class="text-blue-600 text-3xl mb-2">📚</div>
-                <h3 class="font-bold text-lg">Meta Semanal</h3>
-                <p class="text-slate-500">Aprender 10 novos verbos e praticar conversação.</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
-                <div class="text-blue-600 text-3xl mb-2">🎧</div>
-                <h3 class="font-bold text-lg">Listening</h3>
-                <p class="text-slate-500">Ouvir podcasts diários por 20 minutos.</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
-                <div class="text-blue-600 text-3xl mb-2">✍️</div>
-                <h3 class="font-bold text-lg">Writing</h3>
-                <p class="text-slate-500">Escrever um parágrafo sobre o meu dia.</p>
-            </div>
-        </section>
+    <div class="card" id="dashboard-card">
+      <h3 class="title">Unidades</h3>
+      <div class="unit-buttons">
+        <button onclick="openUnit('UNIT 0 – REVIEW')">UNIT 0 – REVIEW</button>
+        <button onclick="openUnit('UNIT 1 – INTRODUCE YOURSELF')">UNIT 1 – INTRODUCE YOURSELF</button>
+      </div>
+    </div>
 
-        <!-- Vocabulary Section -->
-        <section id="vocab" class="mb-16">
-            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
-                <span class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center text-sm">01</span>
-                Word of the Day (Palavra do Dia)
-            </h2>
-            <div class="bg-white border-l-8 border-blue-600 p-8 rounded-r-2xl shadow-md">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Adjective</span>
-                        <h3 class="text-4xl font-black text-slate-900 mt-1">Resilient</h3>
-                        <p class="text-lg text-slate-600 mt-2 italic">"Able to withstand or recover quickly from difficult conditions."</p>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-xl">
-                        <p class="font-bold">Tradução:</p>
-                        <p class="text-blue-700">Resiliente</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="card hidden" id="activity-card">
+      <button class="secondary" onclick="backToDashboard()">← Voltar ao dashboard</button>
+      <h3 id="unit-title">UNIT 0 – REVIEW</h3>
+      <p id="question"></p>
+      <div class="row">
+        <input id="answer-input" placeholder="Digite sua resposta em inglês" />
+        <button onclick="submitAnswer()">ENVIAR RESPOSTA</button>
+      </div>
+      <div id="feedback" class="feedback"></div>
+    </div>
+  </section>
 
-        <!-- Useful Links -->
-        <section id="resources">
-            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
-                <span class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center text-sm">02</span>
-                Recursos Favoritos
-            </h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <a href="https://translate.google.com" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 card-hover flex items-center gap-3 shadow-sm">
-                    <span class="text-2xl">🌐</span>
-                    <span class="font-medium">Google Translate</span>
-                </a>
-                <a href="https://www.cambridgelexicon.com" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 card-hover flex items-center gap-3 shadow-sm">
-                    <span class="text-2xl">📖</span>
-                    <span class="font-medium">Cambridge Dictionary</span>
-                </a>
-                <a href="https://www.duolingo.com" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 card-hover flex items-center gap-3 shadow-sm">
-                    <span class="text-2xl">🦉</span>
-                    <span class="font-medium">Duolingo</span>
-                </a>
-                <a href="https://youglish.com" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 card-hover flex items-center gap-3 shadow-sm">
-                    <span class="text-2xl">🎥</span>
-                    <span class="font-medium">YouGlish</span>
-                </a>
-            </div>
-        </section>
+  <section id="view-professor" class="container hidden">
+    <div class="card">
+      <h2 class="title">Acompanhamento de desenvolvimento</h2>
+      <p class="muted">Visualize logins e progresso. Dados são persistentes até exclusão.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>Login</th>
+            <th>Última unidade</th>
+            <th>XP</th>
+            <th>Média</th>
+            <th>Status</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="teacher-table"></tbody>
+      </table>
+      <div class="row" style="margin-top: 12px;">
+        <button onclick="clearAllData()" style="background: var(--red);">LIMPAR TODOS OS DADOS</button>
+      </div>
+    </div>
+  </section>
 
-    </main>
+  <script>
+    const DB_KEY = 'anne_english_lab_db_v2';
+    const units = {
+      'UNIT 0 – REVIEW': {
+        question: 'How do you say "Bom dia" in English?',
+        accepted: ['good morning'],
+        tips: "Resposta esperada: 'good morning'.\nErro comum: usar 'good day' (é menos natural no contexto)."
+      },
+      'UNIT 1 – INTRODUCE YOURSELF': {
+        question: 'Complete in English: "Meu nome é Ana e eu sou do Brasil."',
+        accepted: ['my name is ana and i am from brazil', 'my name is ana and im from brazil'],
+        tips: "Pontos-chave: usar 'My name is ...' e 'I am from ...'.\nEvite misturar português e inglês na mesma frase."
+      }
+    };
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-12 px-4 mt-20">
-        <div class="max-w-6xl mx-auto text-center">
-            <p class="mb-4">"Language is the road map of a culture. It tells you where its people come from and where they are going."</p>
-            <div class="border-t border-slate-800 pt-8 mt-8 text-sm">
-                &copy; 2024 Laboratório de Inglês da Anne. Criado com dedicação.
-            </div>
-        </div>
-    </footer>
+    let db = loadDB();
 
+    function loadDB() {
+      const raw = localStorage.getItem(DB_KEY);
+      return raw ? JSON.parse(raw) : { activeLogin: null, students: {} };
+    }
+
+    function persist() {
+      localStorage.setItem(DB_KEY, JSON.stringify(db));
+    }
+
+    function getActiveStudent() {
+      if (!db.activeLogin) return null;
+      return db.students[db.activeLogin] || null;
+    }
+
+    function computeAverage(student) {
+      if (!student.history.length) return 0;
+      const sum = student.history.reduce((acc, item) => acc + item.score, 0);
+      return Math.round(sum / student.history.length);
+    }
+
+    function switchTab(tab) {
+      const aluno = document.getElementById('view-aluno');
+      const professor = document.getElementById('view-professor');
+      document.getElementById('tab-aluno').classList.toggle('active', tab === 'aluno');
+      document.getElementById('tab-professor').classList.toggle('active', tab === 'professor');
+      aluno.classList.toggle('hidden', tab !== 'aluno');
+      professor.classList.toggle('hidden', tab !== 'professor');
+      if (tab === 'professor') renderTeacherTable();
+    }
+
+    function saveOrLoginStudent() {
+      const login = document.getElementById('login-input').value.trim().toLowerCase();
+      const name = document.getElementById('name-input').value.trim();
+
+      if (!login || !name) {
+        alert('Preencha login e nome do aluno.');
+        return;
+      }
+
+      if (!db.students[login]) {
+        db.students[login] = {
+          login,
+          name,
+          xp: 0,
+          lastUnit: 'Nenhuma',
+          history: [],
+          updatedAt: Date.now()
+        };
+      } else {
+        db.students[login].name = name;
+      }
+
+      db.activeLogin = login;
+      db.students[login].updatedAt = Date.now();
+      persist();
+      refreshStudentView();
+      renderTeacherTable();
+      document.getElementById('answer-input').value = '';
+      document.getElementById('feedback').textContent = 'Login salvo com sucesso.';
+    }
+
+    function refreshStudentView() {
+      const student = getActiveStudent();
+      document.getElementById('current-name').textContent = student ? student.name : '-';
+      document.getElementById('current-login').textContent = student ? student.login : '-';
+      document.getElementById('current-xp').textContent = student ? student.xp : 0;
+      document.getElementById('current-score').textContent = student ? `${computeAverage(student)}%` : '0%';
+    }
+
+    function openUnit(unitName) {
+      const student = getActiveStudent();
+      if (!student) {
+        alert('Faça login/cadastro do aluno antes de iniciar.');
+        return;
+      }
+      student.lastUnit = unitName;
+      student.updatedAt = Date.now();
+      persist();
+
+      document.getElementById('dashboard-card').classList.add('hidden');
+      document.getElementById('activity-card').classList.remove('hidden');
+      document.getElementById('unit-title').textContent = unitName;
+      document.getElementById('question').textContent = units[unitName].question;
+      document.getElementById('answer-input').value = '';
+      document.getElementById('feedback').textContent = '';
+      refreshStudentView();
+    }
+
+    function backToDashboard() {
+      document.getElementById('activity-card').classList.add('hidden');
+      document.getElementById('dashboard-card').classList.remove('hidden');
+    }
+
+    function continueFromLastPoint() {
+      const student = getActiveStudent();
+      if (!student) {
+        alert('Nenhum aluno logado.');
+        return;
+      }
+      if (!student.lastUnit || student.lastUnit === 'Nenhuma') {
+        alert('Ainda não existe unidade anterior para continuar.');
+        return;
+      }
+      openUnit(student.lastUnit);
+    }
+
+    function submitAnswer() {
+      const student = getActiveStudent();
+      if (!student) return;
+
+      const unitName = document.getElementById('unit-title').textContent;
+      const input = document.getElementById('answer-input').value.trim().toLowerCase();
+      const feedback = document.getElementById('feedback');
+      const expected = units[unitName].accepted;
+
+      let score = 0;
+      if (expected.includes(input)) {
+        score = 100;
+      } else if (input.includes('good') || input.includes('name') || input.includes('from')) {
+        score = 72;
+      } else {
+        score = 45;
+      }
+
+      if (score >= 70) {
+        student.xp += 15;
+        feedback.style.borderColor = 'var(--green)';
+        feedback.style.color = 'var(--green)';
+        feedback.textContent = `Resultado: ${score}% (ACIMA DE 70%)\nMuito bom!\nDetalhe: você usou a estrutura principal corretamente.\nComo melhorar: adicione pontuação e revise pronúncia com leitura em voz alta.`;
+      } else {
+        student.xp += 5;
+        feedback.style.borderColor = 'var(--red)';
+        feedback.style.color = 'var(--red)';
+        feedback.textContent = `Resultado: ${score}% (ABAIXO DO ESPERADO)\nOnde errou: a frase não corresponde ao padrão esperado da unidade.\n${units[unitName].tips}\nComo melhorar: reescreva a frase completa e compare palavra por palavra.`;
+      }
+
+      student.history.push({ unit: unitName, answer: input, score, at: Date.now() });
+      student.updatedAt = Date.now();
+      persist();
+      refreshStudentView();
+      renderTeacherTable();
+    }
+
+    function renderTeacherTable() {
+      const tbody = document.getElementById('teacher-table');
+      const students = Object.values(db.students).sort((a, b) => b.updatedAt - a.updatedAt);
+
+      if (!students.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="muted">Nenhum aluno cadastrado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = students.map(student => {
+        const avg = computeAverage(student);
+        const good = avg >= 70;
+        return `
+          <tr>
+            <td>${student.name}</td>
+            <td>${student.login}</td>
+            <td>${student.lastUnit}</td>
+            <td>${student.xp}</td>
+            <td>${avg}%</td>
+            <td class="${good ? 'status-good' : 'status-bad'}">${good ? 'Acima de 70%' : 'Abaixo do esperado'}</td>
+            <td><button class="secondary" onclick="deleteStudent('${student.login}')">Excluir</button></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function deleteStudent(login) {
+      delete db.students[login];
+      if (db.activeLogin === login) db.activeLogin = null;
+      persist();
+      refreshStudentView();
+      renderTeacherTable();
+      backToDashboard();
+    }
+
+    function clearAllData() {
+      if (!confirm('Deseja apagar todo o desenvolvimento salvo?')) return;
+      localStorage.removeItem(DB_KEY);
+      db = { activeLogin: null, students: {} };
+      refreshStudentView();
+      renderTeacherTable();
+      backToDashboard();
+    }
+
+    refreshStudentView();
+    renderTeacherTable();
+  </script>
 </body>
 </html>
