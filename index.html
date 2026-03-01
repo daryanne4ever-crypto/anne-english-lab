@@ -1,130 +1,408 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratório de Inglês - Anne</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            transition: all 0.3s ease;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anne English Lab</title>
+  <style>
+    :root {
+      --preto: #000000;
+      --branco: #ffffff;
+      --roxo: #4b0082;
+      --violeta: #8a2be2;
+      --verde: #2ecc71;
+      --vermelho: #ff3333;
+      --fundo-card: #111111;
+      --borda: #2a2a2a;
+      --transicao: 0.12s;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--preto);
+      color: var(--branco);
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid var(--roxo);
+      background: #090909;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .tab-btn {
+      flex: 1;
+      border: none;
+      padding: 14px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--branco);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      transition: var(--transicao);
+    }
+
+    .tab-btn:hover,
+    .tab-btn.active {
+      background: var(--roxo);
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--fundo-card);
+      border: 1px solid var(--borda);
+      border-left: 4px solid var(--roxo);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .title {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .muted { color: #d0cde1; }
+
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    input {
+      background: #1b1b1b;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: var(--branco);
+      padding: 10px;
+      min-width: 220px;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--branco);
+      background: var(--roxo);
+      transition: transform var(--transicao), background var(--transicao);
+    }
+
+    button:hover { background: var(--violeta); }
+    button:active { transform: scale(0.98); }
+
+    .btn-gray { background: #353535; }
+    .btn-danger { background: var(--vermelho); }
+    .btn-secondary { background: var(--violeta); }
+
+    .units { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    #area-exercicio { display: none; }
+
+    .feedback {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      line-height: 1.4;
+      border: 1px solid transparent;
+      display: none;
+    }
+
+    .feedback.ok {
+      display: block;
+      border-color: var(--verde);
+      color: var(--verde);
+      background: rgba(46, 204, 113, 0.08);
+    }
+
+    .feedback.bad {
+      display: block;
+      border-color: var(--vermelho);
+      color: var(--vermelho);
+      background: rgba(255, 51, 51, 0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid #2e2e2e;
+      font-size: 0.95rem;
+    }
+
+    th { color: var(--violeta); }
+
+    .status-good { color: var(--verde); font-weight: 700; }
+    .status-low { color: var(--vermelho); font-weight: 700; }
+  </style>
 </head>
-<body class="text-slate-800">
+<body>
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-aluno" onclick="switchTab('aluno')">DASHBOARD DO ALUNO</button>
+    <button class="tab-btn" id="tab-professor" onclick="switchTab('professor')">CADASTRO DO PROFESSOR</button>
+  </div>
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-700">English Lab <span class="text-slate-400 font-light">| Anne</span></div>
-            <div class="space-x-6 hidden md:flex">
-                <a href="#" class="hover:text-blue-600 font-medium">Início</a>
-                <a href="#vocab" class="hover:text-blue-600 font-medium">Vocabulário</a>
-                <a href="#resources" class="hover:text-blue-600 font-medium">Recursos</a>
-            </div>
-        </div>
-    </nav>
+  <section id="view-aluno" class="container">
+    <div class="card">
+      <h2 class="title">Login do Aluno (painel único)</h2>
+      <p class="muted">Sem dois painéis de login. O progresso fica salvo até você excluir no painel do professor.</p>
+      <div class="row">
+        <input id="aluno-nome" type="text" placeholder="Nome do aluno" />
+        <input id="aluno-email" type="email" placeholder="E-mail (login)" />
+        <button onclick="entrarAluno()">ENTRAR / SALVAR LOGIN</button>
+      </div>
+      <p id="login-feedback" class="muted"></p>
+    </div>
 
-    <!-- Hero Section -->
-    <header class="hero-gradient text-white py-20 px-4">
-        <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 italic">Welcome to my English Lab!</h1>
-            <p class="text-xl opacity-90 mb-8">Este é o meu espaço pessoal para registrar progressos, praticar escrita e organizar meus estudos de inglês.</p>
-            <div class="flex justify-center gap-4">
-                <a href="#vocab" class="bg-white text-blue-700 px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-50 transition">Explorar Vocabulário</a>
-            </div>
-        </div>
-    </header>
+    <div class="card">
+      <h2 class="title">Bem-vindo(a), <span id="display-nome">Aluno</span></h2>
+      <div class="row">
+        <div>Login: <strong id="display-login">-</strong></div>
+        <div>XP: <strong id="display-xp">0</strong></div>
+        <div>Última unidade: <strong id="display-unidade">Nenhuma</strong></div>
+      </div>
+      <div style="margin-top: 12px;">
+        <button class="btn-secondary" onclick="continuarOndeParou()">CONTINUAR DE ONDE PAREI</button>
+      </div>
+    </div>
 
-    <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-4 py-16">
-        
-        <!-- Quick Stats/Goal -->
-        <section class="grid md:grid-cols-3 gap-8 mb-16">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
-                <div class="text-blue-600 text-3xl mb-2">📚</div>
-                <h3 class="font-bold text-lg">Meta Semanal</h3>
-                <p class="text-slate-500">Aprender 10 novos verbos e praticar conversação.</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
-                <div class="text-blue-600 text-3xl mb-2">🎧</div>
-                <h3 class="font-bold text-lg">Listening</h3>
-                <p class="text-slate-500">Ouvir podcasts diários por 20 minutos.</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
-                <div class="text-blue-600 text-3xl mb-2">✍️</div>
-                <h3 class="font-bold text-lg">Writing</h3>
-                <p class="text-slate-500">Escrever um parágrafo sobre o meu dia.</p>
-            </div>
-        </section>
+    <div class="card">
+      <h3 class="title">Unidades</h3>
+      <div class="units">
+        <button onclick="abrirLicao('UNIT 0 – REVIEW')">UNIT 0 – REVIEW</button>
+        <button onclick="abrirLicao('UNIT 1 – INTRODUCE YOURSELF')">UNIT 1 – INTRODUCE YOURSELF</button>
+      </div>
+    </div>
 
-        <!-- Vocabulary Section -->
-        <section id="vocab" class="mb-16">
-            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
-                <span class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center text-sm">01</span>
-                Word of the Day (Palavra do Dia)
-            </h2>
-            <div class="bg-white border-l-8 border-blue-600 p-8 rounded-r-2xl shadow-md">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Adjective</span>
-                        <h3 class="text-4xl font-black text-slate-900 mt-1">Resilient</h3>
-                        <p class="text-lg text-slate-600 mt-2 italic">"Able to withstand or recover quickly from difficult conditions."</p>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-xl">
-                        <p class="font-bold">Tradução:</p>
-                        <p class="text-blue-700">Resiliente</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div id="area-exercicio" class="card">
+      <button class="btn-gray" onclick="voltar()">← Voltar ao dashboard</button>
+      <h3 id="titulo-licao">UNIT 0 – REVIEW</h3>
+      <p>Traduza para o português: <strong>"Nice to meet you"</strong></p>
+      <div class="row">
+        <input id="input-resp" type="text" placeholder="Digite sua resposta" />
+        <button onclick="finalizarAtividade()">ENVIAR RESPOSTA</button>
+      </div>
+      <div id="feedback" class="feedback"></div>
+    </div>
+  </section>
 
-        <!-- Useful Links -->
-        <section id="resources">
-            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
-                <span class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center text-sm">02</span>
-                Recursos Favoritos
-            </h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <a href="https://translate.google.com" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 card-hover flex items-center gap-3 shadow-sm">
-                    <span class="text-2xl">🌐</span>
-                    <span class="font-medium">Google Translate</span>
-                </a>
-                <a href="https://www.cambridgelexicon.com" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 card-hover flex items-center gap-3 shadow-sm">
-                    <span class="text-2xl">📖</span>
-                    <span class="font-medium">Cambridge Dictionary</span>
-                </a>
-                <a href="https://www.duolingo.com" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 card-hover flex items-center gap-3 shadow-sm">
-                    <span class="text-2xl">🦉</span>
-                    <span class="font-medium">Duolingo</span>
-                </a>
-                <a href="https://youglish.com" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 card-hover flex items-center gap-3 shadow-sm">
-                    <span class="text-2xl">🎥</span>
-                    <span class="font-medium">YouGlish</span>
-                </a>
-            </div>
-        </section>
+  <section id="view-professor" class="container" style="display:none;">
+    <div class="card">
+      <h2 class="title">Acompanhamento do Professor</h2>
+      <p class="muted">Logins e desenvolvimento dos alunos ficam salvos até exclusão manual.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>Login</th>
+            <th>Última Unidade</th>
+            <th>XP</th>
+            <th>Percentual</th>
+            <th>Status</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="lista-alunos"></tbody>
+      </table>
+      <div style="margin-top: 14px;" class="row">
+        <button class="btn-danger" onclick="limparTudo()">LIMPAR TODOS OS DADOS</button>
+      </div>
+    </div>
+  </section>
 
-    </main>
+  <script>
+    const STORAGE_KEY = 'anne_english_alunos_v2';
+    const ACTIVE_KEY = 'anne_english_aluno_ativo_v2';
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-12 px-4 mt-20">
-        <div class="max-w-6xl mx-auto text-center">
-            <p class="mb-4">"Language is the road map of a culture. It tells you where its people come from and where they are going."</p>
-            <div class="border-t border-slate-800 pt-8 mt-8 text-sm">
-                &copy; 2024 Laboratório de Inglês da Anne. Criado com dedicação.
-            </div>
-        </div>
-    </footer>
+    let alunos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    let alunoAtivoEmail = localStorage.getItem(ACTIVE_KEY) || '';
 
+    function salvar() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(alunos));
+      localStorage.setItem(ACTIVE_KEY, alunoAtivoEmail);
+    }
+
+    function getAlunoAtivo() {
+      return alunos.find(a => a.email === alunoAtivoEmail);
+    }
+
+    function scoreToStatus(percentual) {
+      if (percentual >= 70) return { texto: 'Acima de 70%', cls: 'status-good' };
+      return { texto: 'Abaixo do esperado', cls: 'status-low' };
+    }
+
+    function atualizarInterface() {
+      const aluno = getAlunoAtivo();
+      document.getElementById('display-nome').textContent = aluno?.nome || 'Aluno';
+      document.getElementById('display-login').textContent = aluno?.email || '-';
+      document.getElementById('display-xp').textContent = aluno?.xp ?? 0;
+      document.getElementById('display-unidade').textContent = aluno?.ultimaUnidade || 'Nenhuma';
+      renderizarProfessor();
+    }
+
+    function entrarAluno() {
+      const nome = document.getElementById('aluno-nome').value.trim();
+      const email = document.getElementById('aluno-email').value.trim().toLowerCase();
+      const feedback = document.getElementById('login-feedback');
+
+      if (!nome || !email) {
+        feedback.textContent = 'Informe nome e e-mail para salvar o login.';
+        return;
+      }
+
+      let aluno = alunos.find(a => a.email === email);
+      if (!aluno) {
+        aluno = { nome, email, xp: 0, ultimaUnidade: 'Nenhuma', ultimoScore: 0, historico: [] };
+        alunos.push(aluno);
+      } else {
+        aluno.nome = nome;
+      }
+
+      alunoAtivoEmail = email;
+      salvar();
+      atualizarInterface();
+      feedback.textContent = `Login salvo. Agora você acompanha o desenvolvimento de ${nome}.`;
+    }
+
+    function switchTab(tab) {
+      const alunoView = document.getElementById('view-aluno');
+      const professorView = document.getElementById('view-professor');
+      const tabAluno = document.getElementById('tab-aluno');
+      const tabProfessor = document.getElementById('tab-professor');
+
+      if (tab === 'aluno') {
+        alunoView.style.display = 'block';
+        professorView.style.display = 'none';
+        tabAluno.classList.add('active');
+        tabProfessor.classList.remove('active');
+      } else {
+        alunoView.style.display = 'block';
+        professorView.style.display = 'block';
+        tabAluno.classList.remove('active');
+        tabProfessor.classList.add('active');
+      }
+    }
+
+    function abrirLicao(nome) {
+      const aluno = getAlunoAtivo();
+      if (!aluno) {
+        alert('Faça o login do aluno primeiro.');
+        return;
+      }
+      aluno.ultimaUnidade = nome;
+      document.getElementById('titulo-licao').textContent = nome;
+      document.getElementById('area-exercicio').style.display = 'block';
+      salvar();
+      atualizarInterface();
+    }
+
+    function voltar() {
+      document.getElementById('area-exercicio').style.display = 'none';
+    }
+
+    function continuarOndeParou() {
+      const aluno = getAlunoAtivo();
+      if (!aluno) {
+        alert('Faça o login do aluno primeiro.');
+        return;
+      }
+      if (aluno.ultimaUnidade === 'Nenhuma') {
+        alert('Sem progresso salvo ainda.');
+        return;
+      }
+      abrirLicao(aluno.ultimaUnidade);
+    }
+
+    function finalizarAtividade() {
+      const aluno = getAlunoAtivo();
+      if (!aluno) {
+        alert('Faça o login do aluno primeiro.');
+        return;
+      }
+
+      const resposta = document.getElementById('input-resp').value.toLowerCase().trim();
+      const fb = document.getElementById('feedback');
+      const certas = ['prazer em conhecer você', 'prazer em te conhecer', 'prazer em conhece-lo', 'prazer em conhecê-lo'];
+      const acertou = certas.includes(resposta);
+
+      if (acertou) {
+        aluno.ultimoScore = 100;
+        aluno.xp += 20;
+        fb.className = 'feedback ok';
+        fb.innerHTML = '<strong>Nota: 100% (acima de 70%)</strong><br>Excelente! Você acertou a estrutura completa. Manteve sentido, formalidade e vocabulário corretos.';
+      } else {
+        aluno.ultimoScore = 45;
+        aluno.xp += 5;
+        fb.className = 'feedback bad';
+        fb.innerHTML = '<strong>Nota: abaixo de 70%</strong><br><strong>Onde errou:</strong> a frase esperada era “Prazer em conhecer você/te conhecer”.<br><strong>Como melhorar:</strong> revise o verbo <em>to meet</em> (conhecer/encontrar) e a expressão fixa “Nice to meet you”. Tente repetir em voz alta e reescrever 3 vezes corretamente.';
+      }
+
+      aluno.historico.push({
+        unidade: aluno.ultimaUnidade,
+        resposta,
+        score: aluno.ultimoScore,
+        data: new Date().toISOString()
+      });
+
+      salvar();
+      atualizarInterface();
+    }
+
+    function renderizarProfessor() {
+      const lista = document.getElementById('lista-alunos');
+      if (!alunos.length) {
+        lista.innerHTML = '<tr><td colspan="7">Nenhum aluno cadastrado.</td></tr>';
+        return;
+      }
+
+      lista.innerHTML = alunos.map((a) => {
+        const status = scoreToStatus(a.ultimoScore || 0);
+        return `
+          <tr>
+            <td>${a.nome}</td>
+            <td>${a.email}</td>
+            <td>${a.ultimaUnidade || 'Nenhuma'}</td>
+            <td>${a.xp || 0}</td>
+            <td>${a.ultimoScore || 0}%</td>
+            <td class="${status.cls}">${status.texto}</td>
+            <td><button class="btn-danger" onclick="excluirAluno('${a.email}')">Excluir</button></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function excluirAluno(email) {
+      if (!confirm('Deseja excluir este aluno e seu desenvolvimento?')) return;
+      alunos = alunos.filter(a => a.email !== email);
+      if (alunoAtivoEmail === email) alunoAtivoEmail = '';
+      salvar();
+      atualizarInterface();
+    }
+
+    function limparTudo() {
+      if (!confirm('Deseja apagar TODOS os logins e desenvolvimentos?')) return;
+      alunos = [];
+      alunoAtivoEmail = '';
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(ACTIVE_KEY);
+      atualizarInterface();
+      document.getElementById('area-exercicio').style.display = 'none';
+    }
+
+    atualizarInterface();
+  </script>
 </body>
 </html>
